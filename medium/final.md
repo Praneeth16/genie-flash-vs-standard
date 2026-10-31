@@ -30,7 +30,7 @@ Databricks [recommends Flash for simpler tasks](https://docs.databricks.com/aws/
 
 ## How I tested it
 
-I made up a delivery company called Meridian Parcel and hid traps in its data. Each trap is a number that points the wrong way at first glance, plus one check that shows the truth. These are some of the traps:
+I made up a delivery company called Meridian Parcel and hid traps in its data. Each one is a number that points the wrong way at first glance, plus one check that shows the truth. For example:
 
 - A month of data stops halfway.
 - Every row for a month was loaded twice.
@@ -44,42 +44,40 @@ I asked about each network in three ways:
 - A directed question names the check, e.g., it asks for volume per day.
 - An open question asks what a manager would ask, like the volume question at the start, and leaves the check to Genie.
 
-I ran the test in two rounds. The first round used four everyday cases, such as an average that falls only because the mix of parcels changed. After seeing the results, I built a second round with four harder traps that the agent's instructions never mention, such as the half month of data. I asked every question five times in each mode, each time in a fresh conversation, for 480 answers in all.
+I ran the test in two rounds. The first round used four everyday cases, such as a complaint count that rises while the complaint rate falls. After seeing the results, I built a second round with four harder traps that the agent's instructions never mention, such as the half month of data. I asked every question five times in each mode, each time in a fresh conversation, for 480 answers in all.
 
-Before each round, I wrote down what a correct answer had to contain. Another AI model graded every answer against that list without knowing which mode wrote it, and I checked a sample by hand. After a review, I fixed two mistakes in my first round list and regraded every answer. I also settled a few uneven grades by hand. The [change log](https://github.com/Praneeth16/genie-flash-vs-standard/blob/main/notes/key_changes.md) lists each change.
+Before each round, I wrote down what a correct answer had to contain. Another AI model graded every answer against that list without knowing which mode wrote it, and I checked a sample by hand. A review found two mistakes in my first round list, so I fixed them, regraded everything, and settled a few uneven grades by hand. The [change log](https://github.com/Praneeth16/genie-flash-vs-standard/blob/main/notes/key_changes.md) lists each change.
 
 ## When fast is enough
 
-When the question named the check, **Flash did almost as well as Standard**. Both reached the right conclusion in all 40 directed responses in the first round. In the second round, Flash got 38 of 40 and Standard got 40. On first round lookups, Flash was perfect at 40 of 40.
+When the question named the check, **Flash did almost as well as Standard**. Both reached the right conclusion in all 40 directed answers in the first round. In the second round, Flash missed 2 of 40 and Standard missed none. On the first round lookups, Flash got every one right.
 
 This fits Kahneman's picture. System 1 does fine when someone points it at the right thing. If I ask Genie for volume per day, Flash computes volume per day. It does not need to work out that it should.
 
 [IMAGE: figures/fig2-pass-by-level.png]
 Alt text: Dot chart of first round answers that met every check, by question type. Lookup: Flash 40/40, Standard 39/40. Directed: Flash 36/40, Standard 40/40. Open: Flash 26/40, Standard 37/40.
 
-In the first round, the gap on directed questions came from detail. Flash sometimes gave the right answer without the numbers behind it. In the second round, one of its misses was stranger. Flash found that the complaint rate in remote deliveries fell from 8% to 7%, and then wrote that it had "nearly quadrupled".
+In the first round, the gap on directed questions came from detail. Flash sometimes gave the right answer without the numbers behind it. One second round miss was stranger. Flash found that the complaint rate in remote deliveries fell from 8% to 7%, and then wrote that it had "nearly quadrupled". Even when you name the check, read the numbers.
 
 ## When the obvious number is wrong
 
 The open questions are where the two modes split. In the second round, Flash reached the right conclusion on the partial month, duplicate and mix traps in **0 of 15 runs**. Standard reached it in **10**.
 
-Flash usually ran one query and reported what it saw. When every October row had been loaded twice, Flash said volume "doubled" in all five runs. When a complaint rate rose overall but fell in both delivery zones, Flash said it got worse in all five runs. This is *what you see is all there is* in practice. The first query returns a plausible number, and nothing in the number says it is wrong.
-
-Standard ran more queries before it answered. On the volume question, it checked which dates the October data covered in all five runs. On a delivery question in the first round, it split parcels into local and remote and found that both got slower, in four of five runs. The overall average had fallen from 6.8 days to 4.2 only because October shipped far more local parcels, which are quick to deliver.
-
-[IMAGE: figures/anim-mix-shift.gif]
-Alt text: Animation of 1,000 parcels. The local share grows from 20% to 80% while local and remote delivery times each rise by one day. The overall average moves from 6.8 days down to 4.2 days.
+Flash usually ran one query and reported what it saw. When every October row had been loaded twice, Flash said volume "doubled" in all five runs. When a complaint rate rose overall but fell in both delivery zones, Flash said it got worse every time. This is *what you see is all there is* in practice. The first query returns a plausible number, and nothing in the number says it is wrong.
 
 [IMAGE: figures/fig5-round2-open.png]
 Alt text: Dot chart of second round open answers that reached the full conclusion. Half of October missing: Flash 0/5, Standard 5/5. October rows loaded twice: Flash 0/5, Standard 2/5. Complaint rate with a change in zone mix: Flash 0/5, Standard 3/5. The control for the zone mix trap: both 0/5. The other controls and the internal test parcel trap: both 5/5.
+
+Standard ran more queries before it answered. On the volume question, it checked which dates the October data covered each time. On a first round delivery question, it split the parcels into local and remote deliveries in four of five runs, and found that both had got slower. The overall average had fallen from 6.8 days to 4.2 only because October shipped far more local parcels, and local parcels are quick.
+
+[IMAGE: figures/anim-mix-shift.gif]
+Alt text: Animation of 1,000 parcels. The local share grows from 20% to 80% while local and remote delivery times each rise by one day. The overall average moves from 6.8 days down to 4.2 days.
 
 The checks cost time. On the open questions in the second round, Flash took a median of 11 seconds and Standard took 26.
 
 ## Slow is not always right
 
-Standard got 10 of those 15 trap runs right, not 15. It found the duplicate rows in only two of five runs.
-
-It also overthought. One lookup asked only for two averages, and Standard added "Delivery time improved by 2.6 days month-over-month", which is the misreading the trap was built to catch. On a control where the complaint rate did get worse, Standard twice ran a significance test and declined to call it worse. The other answers, from both modes, said it got worse but never checked the two zones, which my list required. That is why the chart shows 0 of 5 for both.
+Standard was not flawless. It found the duplicate rows in only two of five runs, and it overthought. One lookup asked only for two averages, and Standard added "Delivery time improved by 2.6 days month-over-month", which is the misreading the trap was built to catch. On a control where the complaint rate did get worse, Standard twice ran a significance test and declined to call it worse. Every other answer, from both modes, said worse without looking at the zones, so none of them passed my checks.
 
 Standard also wrote more. Its median open answer in the first round had 233 words, against 63 for Flash. In those open answers, the grading model found 25 claims that the data did not support in Standard's answers, against 8 in Flash's. More reasoning gave Standard more room to be useful and more room to be wrong.
 
@@ -87,12 +85,12 @@ Standard also wrote more. Its median open answer in the first round had 233 word
 
 Here is how I plan to choose:
 
-- **I use Flash when I can name the check.** I put the check in the question, and I ask for the supporting numbers, because Flash tends to leave them out.
-- **I use Standard when the obvious number could be wrong** for a reason I have not thought of. Partial months, duplicate rows and shifts in mix are the cases where Flash failed in every open run.
+- **Flash, when I can name the check.** I ask for volume per day rather than volume, and I ask for the supporting numbers, because Flash tends to leave them out.
+- **Standard, when the obvious number could be wrong** for a reason I have not thought of. Partial months, duplicate rows and shifts in mix caught Flash in every open run.
 
-In Kahneman's terms, Flash behaves like System 1, and the person asking can do the System 2 part.
+In Kahneman's terms, Flash behaves like System 1, and the person asking has to be System 2.
 
-> If you know what could go wrong, put the check in the question and use Flash. If you don't, wait for Standard.
+> If you know what could go wrong, say so and use Flash. If you don't, wait for Standard.
 
 If you build Genie agents, you can also write the checks your users often need into the agent's instructions, e.g., checking that a month is complete. Flash might then make them too. I have not tested that yet.
 
