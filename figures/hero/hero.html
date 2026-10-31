@@ -1,0 +1,263 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; padding: 0; background: #f6f0e2; }
+  svg { display: block; }
+  .ty { font-family: "American Typewriter", "Courier New", serif; fill: #2a2622; }
+  .it { font-family: "Baskerville", "Georgia", serif; font-style: italic; fill: #2a2622; }
+</style>
+</head>
+<body>
+<svg id="art" xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4"/>
+    </filter>
+    <filter id="paper">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="2"/>
+      <feColorMatrix values="0 0 0 0 0.35  0 0 0 0 0.3  0 0 0 0 0.25  0 0 0 0.09 0"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="1" seed="9"/>
+      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.35 0"/>
+      <feComposite in2="SourceGraphic" operator="in"/>
+    </filter>
+    <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="5" stroke="#2a2622" stroke-width="1.1"/>
+    </pattern>
+    <pattern id="woodgrain" width="160" height="14" patternUnits="userSpaceOnUse">
+      <path d="M0 4 C40 2 80 6 160 4 M0 10 C50 12 100 8 160 11" stroke="#9a6a3a" stroke-width="0.8" fill="none" opacity="0.5"/>
+    </pattern>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M1 1 L9 5 L1 9 L3.5 5 Z" fill="#2a2622"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#f6f0e2"/>
+  <rect width="1600" height="900" filter="url(#paper)"/>
+
+  <g id="layer"></g>
+</svg>
+
+<script>
+const NS = "http://www.w3.org/2000/svg";
+const layer = document.getElementById("layer");
+function el(tag, attrs, parent = layer, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  parent.appendChild(e);
+  return e;
+}
+function g(attrs = {}, parent = layer) { return el("g", attrs, parent); }
+function text(x, y, s, size, cls = "ty", anchor = "middle", fill, extra = {}) {
+  return el("text", Object.assign({ x, y, class: cls, "font-size": size, "text-anchor": anchor, fill: fill || "#2a2622", style: fill ? `fill:${fill}` : "" }, extra), layer, s);
+}
+function mtext(x, y, lines, size, cls, anchor, fills, lh) {
+  lines.forEach((s, i) => text(x, y + i * (lh || size * 1.2), s, size, cls, anchor, fills && fills[i]));
+}
+
+// state box with hatched shadow
+function box(cx, cy, w, h, label, fill, opts = {}) {
+  const x = cx - w / 2, y = cy - h / 2, r = h / 2.3;
+  const rg = g({ filter: "url(#rough)" });
+  el("rect", { x: x + 7, y: y + 7, width: w, height: h, rx: r, fill: "url(#hatch)" }, rg);
+  el("rect", { x, y, width: w, height: h, rx: r, fill, stroke: opts.stroke || "#2a2622", "stroke-width": opts.sw || 2.6 }, rg);
+  el("rect", { x, y, width: w, height: h, rx: r, fill: "#fff", filter: "url(#grain)", opacity: 0.25 }, rg);
+  text(cx, cy + 8, label, opts.size || 23, "ty", "middle", opts.color);
+}
+function start(cx, cy) {
+  const rg = g({ filter: "url(#rough)" });
+  el("circle", { cx, cy, r: 14, fill: "#fff", stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("circle", { cx, cy, r: 9, fill: "#2a2622" }, rg);
+}
+function arrow(d) {
+  const rg = g({ filter: "url(#rough)" });
+  el("path", { d, fill: "none", stroke: "#2a2622", "stroke-width": 2.3, "marker-end": "url(#arr)", "stroke-linecap": "round" }, rg);
+}
+function panel(x, y, w, h, title, fill) {
+  const rg = g({ filter: "url(#rough)" });
+  el("rect", { x, y, width: w, height: h, rx: 12, fill, stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("rect", { x, y, width: w, height: h, rx: 12, fill: "#fff", filter: "url(#grain)", opacity: 0.35 }, rg);
+  el("line", { x1: x, y1: y + 50, x2: x + w, y2: y + 50, stroke: "#2a2622", "stroke-width": 1.6 }, rg);
+  text(x + w / 2, y + 35, title, 28, "ty");
+}
+
+// ---------- header ----------
+text(70, 62, "databricks genie  ·  flash vs standard", 22, "ty", "start", "#4a443d", { "letter-spacing": "2" });
+text(62, 150, "Thinking, fast and slow", 82, "ty", "start", null, { "letter-spacing": "1" });
+text(66, 196, "one question, two ways to answer it", 30, "it", "start");
+
+// hanging question board
+{
+  const rg = g({ filter: "url(#rough)" });
+  el("line", { x1: 1080, y1: 6, x2: 1118, y2: 44, stroke: "#2a2622", "stroke-width": 1.6 }, rg);
+  el("line", { x1: 1500, y1: 6, x2: 1462, y2: 44, stroke: "#2a2622", "stroke-width": 1.6 }, rg);
+  el("rect", { x: 1040, y: 44, width: 500, height: 168, rx: 8, fill: "#c99a62", stroke: "#2a2622", "stroke-width": 2.4 }, rg);
+  el("rect", { x: 1054, y: 58, width: 472, height: 140, rx: 4, fill: "#f8f1e1", stroke: "#2a2622", "stroke-width": 1.6 }, rg);
+}
+text(1290, 92, "the question", 24, "ty");
+text(1290, 132, "How did shipment volume change", 23, "it");
+text(1290, 166, "from September to October?", 23, "it");
+
+// ---------- frame ----------
+{
+  const rg = g({ filter: "url(#rough)" });
+  el("rect", { x: 40, y: 232, width: 1520, height: 470, rx: 18, fill: "none", stroke: "#2a2622", "stroke-width": 2.2 }, rg);
+  el("rect", { x: 48, y: 240, width: 1504, height: 454, rx: 14, fill: "#fbf7ec", stroke: "#2a2622", "stroke-width": 1.4 }, rg);
+  el("line", { x1: 48, y1: 284, x2: 1552, y2: 284, stroke: "#2a2622", "stroke-width": 1.4 }, rg);
+  el("line", { x1: 800, y1: 296, x2: 800, y2: 684, stroke: "#2a2622", "stroke-width": 1.6, "stroke-dasharray": "7 7" }, rg);
+}
+text(800, 272, "at the same time", 26, "it");
+
+// ---------- Flash panel ----------
+const FL = "#fbe1cf", FLB = "#f6cdb0";
+panel(78, 300, 694, 380, "Flash  ·  about 10 seconds", FL);
+start(425, 372);
+arrow("M425 387 L425 396");
+box(425, 420, 270, 48, "a question arrives", FLB);
+arrow("M425 445 C428 460 422 470 425 482");
+text(440, 470, "answers fast", 22, "it", "start");
+box(425, 508, 250, 48, "runs one query", FLB);
+arrow("M370 533 C362 560 345 590 330 612");
+text(96, 566, "reports the first number", 21, "it", "start");
+text(96, 592, "[you didn\u2019t name the check]", 18, "it", "start", "#c0392b");
+arrow("M485 533 C500 560 520 590 535 612");
+text(560, 566, "counts per day", 21, "it", "start");
+text(560, 592, "[you named the check]", 18, "it", "start", "#2f6fb5");
+box(245, 640, 290, 48, "\u201Cvolume fell by 300\u201D", "#ffe9ea", { stroke: "#d2343f", sw: 3, color: "#b8232f", size: 22 });
+box(590, 640, 330, 48, "\u201Cvolume rose, 30 to 40 a day\u201D", FLB, { size: 20 });
+
+// ---------- Standard panel ----------
+const ST = "#dde8f5", STB = "#c7daf0";
+panel(828, 300, 694, 380, "Standard  ·  up to 32 seconds", ST);
+start(1000, 375);
+arrow("M1000 390 L1000 404");
+box(1000, 432, 270, 50, "a question arrives", STB);
+arrow("M1000 459 C1003 478 997 492 1000 508");
+text(1015, 491, "starts digging", 22, "it", "start");
+box(1000, 536, 300, 50, "checks which dates exist", STB);
+arrow("M1000 563 C1003 582 997 596 1000 612");
+text(1015, 596, "half the month is missing", 22, "it", "start");
+box(1000, 640, 300, 50, "October stops on the 15th", STB);
+// up the right column
+arrow("M1152 640 C1240 640 1350 630 1352 586");
+box(1355, 560, 270, 48, "compares volume per day", STB, { size: 21 });
+text(1190, 664, "counts per day instead", 20, "it", "start");
+arrow("M1355 535 C1358 505 1352 490 1355 470");
+text(1370, 510, "answers", 22, "it", "start");
+box(1355, 444, 300, 48, "“volume rose, 30 to 40 a day”", STB, { size: 20 });
+
+// ---------- counter scene ----------
+// counter
+{
+  const rg = g({ filter: "url(#rough)" });
+  el("rect", { x: 24, y: 828, width: 1552, height: 20, rx: 3, fill: "#c7924f", stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("rect", { x: 24, y: 828, width: 1552, height: 20, fill: "url(#woodgrain)" }, rg);
+  el("rect", { x: 36, y: 848, width: 1528, height: 60, fill: "#f4ead6", stroke: "#2a2622", "stroke-width": 2 }, rg);
+  for (let x = 80; x < 1560; x += 48) el("line", { x1: x, y1: 856, x2: x, y2: 900, stroke: "#2a2622", "stroke-width": 1 }, rg);
+}
+
+// courier (Flash) with speed lines
+{
+  const cx = 230, rg = g({ filter: "url(#rough)" });
+  for (let i = 0; i < 4; i++) el("line", { x1: cx - 120 + i * 6, y1: 740 + i * 18, x2: cx - 70 + i * 6, y2: 740 + i * 18, stroke: "#2a2622", "stroke-width": 2, "stroke-linecap": "round" }, rg);
+  el("path", { d: `M${cx - 48} 828 C${cx - 50} 790 ${cx - 40} 768 ${cx} 766 C${cx + 40} 768 ${cx + 50} 790 ${cx + 48} 828 Z`, fill: "#ef8a52", stroke: "#2a2622", "stroke-width": 2.2 }, rg);
+  el("circle", { cx, cy: 736, r: 32, fill: "#fdf6ec", stroke: "#2a2622", "stroke-width": 2.2 }, rg);
+  el("path", { d: `M${cx - 33} 728 C${cx - 30} 700 ${cx + 30} 700 ${cx + 33} 728 Z`, fill: "#ef8a52", stroke: "#2a2622", "stroke-width": 2.2 }, rg);
+  el("path", { d: `M${cx + 30} 726 L${cx + 58} 730`, stroke: "#2a2622", "stroke-width": 4, "stroke-linecap": "round" }, rg);
+  el("path", { d: `M${cx - 4} 706 L${cx - 10} 718 L${cx - 2} 718 L${cx - 7} 728 L${cx + 6} 714 L${cx - 1} 714 L${cx + 3} 706 Z`, fill: "#ffd84d", stroke: "#2a2622", "stroke-width": 1 }, rg);
+  el("circle", { cx: cx - 11, cy: 740, r: 3.2, fill: "#2a2622" }, rg);
+  el("circle", { cx: cx + 11, cy: 740, r: 3.2, fill: "#2a2622" }, rg);
+  el("ellipse", { cx: cx - 20, cy: 750, rx: 6, ry: 3.5, fill: "#f5a3a3" }, rg);
+  el("ellipse", { cx: cx + 20, cy: 750, rx: 6, ry: 3.5, fill: "#f5a3a3" }, rg);
+  el("path", { d: `M${cx - 6} 753 Q${cx} 759 ${cx + 6} 753`, stroke: "#2a2622", "stroke-width": 1.8, fill: "none" }, rg);
+  // parcel held out
+  el("rect", { x: cx + 34, y: 776, width: 52, height: 42, fill: "#d9a86c", stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("line", { x1: cx + 60, y1: 776, x2: cx + 60, y2: 818, stroke: "#b07a3e", "stroke-width": 4 }, rg);
+}
+// stopwatch
+{
+  const cx = 360, cy = 796, rg = g({ filter: "url(#rough)" });
+  el("rect", { x: cx - 6, y: cy - 40, width: 12, height: 9, fill: "#2a2622" }, rg);
+  el("circle", { cx, cy, r: 28, fill: "#fff8ee", stroke: "#2a2622", "stroke-width": 2.4 }, rg);
+  el("line", { x1: cx, y1: cy, x2: cx + 12, y2: cy - 16, stroke: "#d2343f", "stroke-width": 2.4, "stroke-linecap": "round" }, rg);
+}
+text(360, 805, "", 1);
+text(360, 846, "", 1);
+
+// parcel stacks: September full, October half
+{
+  const rg = g({ filter: "url(#rough)" });
+  const boxAt = (x, y, w, h) => {
+    el("rect", { x, y, width: w, height: h, fill: "#dcab70", stroke: "#2a2622", "stroke-width": 2 }, rg);
+    el("line", { x1: x + w / 2, y1: y, x2: x + w / 2, y2: y + h, stroke: "#b07a3e", "stroke-width": 4 }, rg);
+  };
+  boxAt(470, 786, 70, 42); boxAt(545, 786, 70, 42); boxAt(505, 744, 70, 42);
+  boxAt(660, 786, 70, 42);
+}
+text(542, 734, "", 1);
+text(543, 732, "Sept", 20, "it");
+text(695, 776, "Oct, so far", 20, "it");
+
+// calendar with half of October torn off
+{
+  const x = 880, y = 690, w = 150, rg = g({ filter: "url(#rough)" });
+  el("rect", { x, y, width: w, height: 34, fill: "#d2343f", stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("path", { d: `M${x} ${y + 34} L${x + w} ${y + 34} L${x + w} ${y + 106} L${x + w - 14} ${y + 98} L${x + w - 30} ${y + 110} L${x + w - 48} ${y + 100} L${x + w - 66} ${y + 112} L${x + w - 86} ${y + 99} L${x + w - 104} ${y + 111} L${x + w - 122} ${y + 100} L${x + 14} ${y + 110} L${x} ${y + 102} Z`, fill: "#fffaf0", stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("circle", { cx: x + 30, cy: y + 4, r: 5, fill: "#fff", stroke: "#2a2622", "stroke-width": 1.6 }, rg);
+  el("circle", { cx: x + w - 30, cy: y + 4, r: 5, fill: "#fff", stroke: "#2a2622", "stroke-width": 1.6 }, rg);
+  // torn scrap on the counter
+  el("path", { d: `M${x + 40} 812 L${x + 150} 806 L${x + 156} 824 L${x + 42} 828 Z`, fill: "#fffaf0", stroke: "#2a2622", "stroke-width": 1.6 }, rg);
+}
+text(955, 715, "OCTOBER", 17, "ty", "middle", "#fff8ee", { "letter-spacing": "2" });
+for (let r = 0; r < 3; r++) for (let c = 0; c < 6; c++) {
+  const d = r * 6 + c + 1; if (d > 15) continue;
+  text(894 + c * 24, 744 + r * 18, String(d), 13, "ty");
+}
+text(1010, 822, "16 to 31", 12, "it");
+
+// hourglass
+{
+  const cx = 1180, rg = g({ filter: "url(#rough)" });
+  el("rect", { x: cx - 30, y: 742, width: 60, height: 8, fill: "#9a6a3a", stroke: "#2a2622", "stroke-width": 1.8 }, rg);
+  el("rect", { x: cx - 30, y: 820, width: 60, height: 8, fill: "#9a6a3a", stroke: "#2a2622", "stroke-width": 1.8 }, rg);
+  el("path", { d: `M${cx - 22} 750 L${cx + 22} 750 L${cx + 3} 785 L${cx + 22} 820 L${cx - 22} 820 L${cx - 3} 785 Z`, fill: "#eef5fb", stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("path", { d: `M${cx - 13} 766 L${cx + 13} 766 L${cx + 2} 783 L${cx - 2} 783 Z M${cx - 18} 820 L${cx + 18} 820 L${cx} 801 Z`, fill: "#e3b066" }, rg);
+}
+
+// clerk (Standard) with glasses and magnifying glass
+{
+  const cx = 1380, rg = g({ filter: "url(#rough)" });
+  el("path", { d: `M${cx - 48} 828 C${cx - 50} 790 ${cx - 40} 768 ${cx} 766 C${cx + 40} 768 ${cx + 50} 790 ${cx + 48} 828 Z`, fill: "#6f9fd3", stroke: "#2a2622", "stroke-width": 2.2 }, rg);
+  el("path", { d: `M${cx - 14} 768 L${cx} 800 L${cx + 14} 768`, fill: "#fdf6ec", stroke: "#2a2622", "stroke-width": 1.6 }, rg);
+  el("circle", { cx, cy: 736, r: 32, fill: "#fdf6ec", stroke: "#2a2622", "stroke-width": 2.2 }, rg);
+  el("circle", { cx, cy: 696, r: 15, fill: "#2a2622" }, rg);
+  el("path", { d: `M${cx - 33} 732 C${cx - 30} 704 ${cx + 30} 704 ${cx + 33} 732 C${cx + 20} 716 ${cx - 20} 716 ${cx - 33} 732 Z`, fill: "#2a2622" }, rg);
+  el("circle", { cx: cx - 12, cy: 742, r: 8, fill: "none", stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("circle", { cx: cx + 12, cy: 742, r: 8, fill: "none", stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("line", { x1: cx - 4, y1: 742, x2: cx + 4, y2: 742, stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("circle", { cx: cx - 12, cy: 742, r: 2.4, fill: "#2a2622" }, rg);
+  el("circle", { cx: cx + 12, cy: 742, r: 2.4, fill: "#2a2622" }, rg);
+  el("ellipse", { cx: cx - 22, cy: 754, rx: 5.5, ry: 3.2, fill: "#f5a3a3" }, rg);
+  el("ellipse", { cx: cx + 22, cy: 754, rx: 5.5, ry: 3.2, fill: "#f5a3a3" }, rg);
+  el("path", { d: `M${cx - 5} 757 Q${cx} 761 ${cx + 5} 757`, stroke: "#2a2622", "stroke-width": 1.8, fill: "none" }, rg);
+  // magnifying glass pointing left at the calendar
+  el("line", { x1: cx - 36, y1: 800, x2: cx - 76, y2: 776, stroke: "#7a4f2a", "stroke-width": 7, "stroke-linecap": "round" }, rg);
+  el("circle", { cx: cx - 96, cy: 764, r: 24, fill: "#e8f3fb", stroke: "#2a2622", "stroke-width": 3 }, rg);
+  el("path", { d: `M${cx - 108} 754 Q${cx - 102} 748 ${cx - 94} 748`, stroke: "#fff", "stroke-width": 3, fill: "none" }, rg);
+}
+// clipboard
+{
+  const x = 1462, y = 760, rg = g({ filter: "url(#rough)" });
+  el("rect", { x, y, width: 54, height: 68, rx: 4, fill: "#b9875a", stroke: "#2a2622", "stroke-width": 2 }, rg);
+  el("rect", { x: x + 6, y: y + 10, width: 42, height: 52, fill: "#fffaf0", stroke: "#2a2622", "stroke-width": 1.4 }, rg);
+  for (let i = 0; i < 4; i++) el("line", { x1: x + 12, y1: y + 22 + i * 10, x2: x + 42, y2: y + 22 + i * 10, stroke: "#2a2622", "stroke-width": 1.2 }, rg);
+  el("path", { d: `M${x + 12} ${y + 50} l5 5 l9 -11`, stroke: "#2e8b57", "stroke-width": 2.2, fill: "none" }, rg);
+}
+</script>
+</body>
+</html>

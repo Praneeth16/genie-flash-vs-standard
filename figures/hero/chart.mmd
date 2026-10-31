@@ -1,0 +1,42 @@
+---
+title: "Thinking, fast and slow"
+---
+stateDiagram-v2
+  direction LR
+  state "Legend" as legend {
+    lg0: Breaks AnswerIsRight
+    lg1: Path to the AnswerIsRight bug
+  }
+  class lg0 breaks
+  class lg1 bugPath
+  state "At the same time" as all {
+    state "Flash, about 10 seconds" as r0 {
+      s0: a question arrives
+      s1: runs one query
+      s2: "volume fell by 300"
+      s3: "volume rose, 30 to 40 a day"
+      [*] --> s0
+      s0 --> s1: answers fast
+      s1 --> s2: reports the first number [you didn't name the check]
+      s1 --> s3: counts per day [you named the check]
+    }
+    --
+    state "Standard, up to 32 seconds" as r1 {
+      s4: a question arrives
+      s5: checks which dates exist
+      s6: October stops on the 15th
+      s7: compares volume per day
+      s8: "volume rose, 30 to 40 a day"
+      [*] --> s4
+      s4 --> s5: starts digging
+      s5 --> s6: half the month is missing
+      s6 --> s7: counts per day instead
+      s7 --> s8: answers
+    }
+  }
+  classDef breaks fill:#ffecee,stroke:#e72e3b,stroke-width:2.5px,color:#cd2834
+  class s0 bugPath
+  class s1 bugPath
+  class s2 breaks
+  class s2 bugPath
+  class s4 bugPath

@@ -4,6 +4,8 @@
 
 Praneeth Paikray, 31 October 2026
 
+![Hand-drawn statechart. Flash and Standard answer the same question at the same time: how did shipment volume change from September to October. Flash runs one query and, unless you named the check, says volume fell by 300, which is wrong. Standard checks which dates exist, finds that October stops on the 15th, compares volume per day and says volume rose from 30 to 40 a day. Below, a fast courier, parcels, a calendar with the second half of October torn off, an hourglass and a clerk with a magnifying glass stand at a depot counter.](../figures/hero-statechart.png)
+
 ## One question, two answers
 
 Databricks Genie answers questions about company data. You ask in plain English, and it writes and runs the database queries for you. I asked it how shipment volume in one delivery network changed from September to October.
