@@ -2,16 +2,18 @@
 Pair order and mode order within each pair are randomized with a fixed seed.
 Each request starts a fresh conversation. Nothing is retried; failures stay in the record.
 Records append to results/raw.jsonl, so a rerun skips completed (qid, repeat, mode) keys."""
-import json, random, sys, threading, time
+import json, os, random, sys, threading, time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from genie_call import ask, SPACE_ID
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "results/raw.jsonl"
+OUT = ROOT / os.environ.get("RAW", "results/raw.jsonl")
+# Round 2 routes each question to its agent: GENIE_SPACE_R2 and GENIE_SPACE_NODEFS.
+SPACES = {"r2": os.environ.get("GENIE_SPACE_R2"), "nodefs": os.environ.get("GENIE_SPACE_NODEFS")}
 REPEATS, WORKERS, SEED = 5, int(sys.argv[1]) if len(sys.argv) > 1 else 3, 20261031
 
-key = json.loads((ROOT / "runner/answer_key.json").read_text())
+key = json.loads((ROOT / os.environ.get("KEY", "runner/answer_key.json")).read_text())
 pairs = [(q, rep) for q in key for rep in range(1, REPEATS + 1)]
 rng = random.Random(SEED)
 rng.shuffle(pairs)
@@ -29,8 +31,9 @@ def run_pair(item):
     for pos, mode in enumerate(modes):
         if (q["qid"], rep, mode) in done:
             continue
-        r = ask(q["question"], mode)
-        r.update(qid=q["qid"], repeat=rep, pair_index=i, position_in_pair=pos, space_id=SPACE_ID)
+        space = SPACES.get(q.get("agent")) or SPACE_ID
+        r = ask(q["question"], mode, space_id=space)
+        r.update(qid=q["qid"], repeat=rep, pair_index=i, position_in_pair=pos, space_id=space)
         with lock:
             with OUT.open("a") as f:
                 f.write(json.dumps(r) + "\n")

@@ -6,10 +6,11 @@ from pathlib import Path
 from databricks.sdk import WorkspaceClient
 
 ROOT = Path(__file__).resolve().parent.parent
-RAW, OUT = ROOT / "results/raw.jsonl", ROOT / "results/grades.jsonl"
+RAW = ROOT / os.environ.get("RAW", "results/raw.jsonl")
+OUT = ROOT / os.environ.get("GRADES", "results/grades.jsonl")
 JUDGE = "databricks-claude-opus-5-5"
 w = WorkspaceClient(profile=os.environ.get("DATABRICKS_CONFIG_PROFILE"))
-key = {q["qid"]: q for q in json.loads((ROOT / "runner/answer_key.json").read_text())}
+key = {q["qid"]: q for q in json.loads((ROOT / os.environ.get("KEY", "runner/answer_key.json")).read_text())}
 
 SYSTEM = """You grade one analytics answer against an answer key. You do not know which system wrote it.
 Grade each criterion as pass or fail. A criterion passes only when the response itself states or clearly shows it.
@@ -19,8 +20,8 @@ Count unsupported claims: statements that the data and the response's own querie
 Return only JSON: {"criteria": [{"pass": true|false, "reason": "..."}, x4], "unsupported_claims": <int>, "unsupported_examples": ["..."], "acknowledges_missing_evidence": true|false|null}
 Set acknowledges_missing_evidence to null unless the question asks for data the tables do not contain."""
 
-def table_schemas():
-    sql = (ROOT / "sql/01_build_data.sql").read_text()
+def table_schemas(path):
+    sql = (ROOT / path).read_text()
     out = []
     for name, body in re.findall(r"CREATE OR REPLACE TABLE (\w+) \((.*?)\) COMMENT", sql, re.S):
         if not name.startswith("_"):
@@ -28,7 +29,8 @@ def table_schemas():
             out.append(f"{name}: " + "; ".join(cols))
     return "\n".join(out)
 
-SCHEMAS = table_schemas()
+# Round 2 "r2" questions run on the round 2 schema, which adds is_test and load_batch_id.
+SCHEMAS = {"r1": table_schemas("sql/01_build_data.sql"), "r2": table_schemas("sql/03_build_round2.sql")}
 
 def fix_text(t):
     try:
@@ -41,7 +43,7 @@ def packet(r):
     sql = "\n\n".join(f"-- {s['args'].get('title', '')}\n{s['args'].get('sql', s['args'])}" for s in r["sql"]) or "(no SQL calls)"
     crit = "\n".join(f"{i+1}. {c}" for i, c in enumerate(q["criteria"]))
     answer = re.sub(r"\\\[\[\d+\]\(https?://[^)]*\)\\\]", "", fix_text(r["answer"] or "(no answer)"))
-    return f"QUESTION\n{q['question']}\n\nTABLES THE SYSTEM COULD QUERY (complete list, with column comments)\n{SCHEMAS}\n\nANSWER KEY FACTS\n{q['facts']}\n\nCRITERIA\n{crit}\n\nRESPONSE\n{answer}\n\nSQL THE SYSTEM RAN\n{sql}"
+    return f"QUESTION\n{q['question']}\n\nTABLES THE SYSTEM COULD QUERY (complete list, with column comments)\n{SCHEMAS['r2' if q.get('agent') == 'r2' else 'r1']}\n\nANSWER KEY FACTS\n{q['facts']}\n\nCRITERIA\n{crit}\n\nRESPONSE\n{answer}\n\nSQL THE SYSTEM RAN\n{sql}"
 
 def grade(r):
     if r["status"] != "completed" or not r["answer"]:

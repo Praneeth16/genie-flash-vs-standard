@@ -4,7 +4,9 @@ from databricks.sdk import WorkspaceClient
 
 PROFILE = os.environ.get("DATABRICKS_CONFIG_PROFILE")
 WAREHOUSE = os.environ["WAREHOUSE_ID"]
-FQ = os.environ.get("MERIDIAN_CATALOG", "serverless_lakebase_praneeth_catalog") + ".meridian_parcel"
+FQ = os.environ.get("MERIDIAN_CATALOG", "serverless_lakebase_praneeth_catalog") + "." + os.environ.get("MERIDIAN_SCHEMA", "meridian_parcel")
+# AGENT_VARIANT=nodefs drops the complaint-rate and refund definitions (round 2, part A).
+VARIANT = os.environ.get("AGENT_VARIANT", "full")
 TABLES = ["complaints", "credits", "invoices", "networks", "refund_policies", "routing_changes", "shipments"]
 
 INSTRUCTIONS = [
@@ -14,6 +16,9 @@ INSTRUCTIONS = [
     "Net contribution means invoice revenue minus fulfilment_cost minus credits. Credits link to invoices through invoice_id. An invoice belongs to the month of its invoice_date.\n",
     "Late-delivery refunds: the refund policy in effect on a shipment's promised_date applies. A shipment qualifies when delay_days is greater than the policy's min_delay_days_exclusive and its delay_reason is not the policy's excluded_delay_reason. The refund is the shipment's shipping_fee.\n",
 ]
+
+if VARIANT == "nodefs":
+    INSTRUCTIONS = [l for l in INSTRUCTIONS if not l.startswith(("Complaint rate", "Late-delivery refunds"))]
 
 def jid(name):
     return hashlib.md5(name.encode()).hexdigest()
@@ -37,7 +42,7 @@ space = {
 }
 
 w = WorkspaceClient(profile=PROFILE)
-body = {"title": "Meridian Parcel Operations", "warehouse_id": WAREHOUSE,
+body = {"title": os.environ.get("AGENT_TITLE", "Meridian Parcel Operations"), "warehouse_id": WAREHOUSE,
         "description": "Shipments, complaints, invoices, credits and refund policies for Meridian Parcel networks.",
         "serialized_space": json.dumps(space)}
 if len(sys.argv) > 1:

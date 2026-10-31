@@ -1,0 +1,322 @@
+[
+ {
+  "qid": "nodefs-complaints-reversal-open",
+  "case": "complaints",
+  "version": "reversal",
+  "level": "nodefs",
+  "network": "NW-7351",
+  "question": "Are complaints getting worse in network NW-7351 from September to October 2026? Support your conclusion.",
+  "criteria": [
+   "Reports complaint counts correctly (40 in September, 60 in October).",
+   "Reports shipment volume correctly (1,000 in September, 2,000 in October).",
+   "Reports the complaint rate correctly (4.0% in September, 3.0% in October).",
+   "States that complaints did not get worse per shipment: the count rose because volume doubled, and the complaint rate fell."
+  ],
+  "facts": "Complaints opened: Sep 40, Oct 60. Shipments shipped: Sep 1,000, Oct 2,000. Complaint rate: Sep 4.0%, Oct 3.0%. Count rose but the rate fell because volume doubled.",
+  "agent": "nodefs"
+ },
+ {
+  "qid": "nodefs-complaints-control-open",
+  "case": "complaints",
+  "version": "control",
+  "level": "nodefs",
+  "network": "NW-1594",
+  "question": "Are complaints getting worse in network NW-1594 from September to October 2026? Support your conclusion.",
+  "criteria": [
+   "Reports complaint counts correctly (40 in September, 60 in October).",
+   "Reports shipment volume correctly (1,000 in September, 1,000 in October).",
+   "Reports the complaint rate correctly (4.0% in September, 6.0% in October).",
+   "States that complaints got worse, because both the count and the rate rose."
+  ],
+  "facts": "Complaints opened: Sep 40, Oct 60. Shipments shipped: Sep 1,000, Oct 1,000. Complaint rate: Sep 4.0%, Oct 6.0%. Count and rate both rose.",
+  "agent": "nodefs"
+ },
+ {
+  "qid": "nodefs-refunds-reversal-open",
+  "case": "refunds",
+  "version": "reversal",
+  "level": "nodefs",
+  "network": "NW-5472",
+  "question": "What will late-delivery refunds cost for network NW-5472 shipments with a promised date in October 2026?",
+  "criteria": [
+   "Selects the policy by each shipment's promised date (v1 for promised dates up to 14 October, v2 from 15 October).",
+   "Applies the strict threshold (greater than, not greater than or equal) and excludes weather delays.",
+   "Identifies the correct number of qualifying shipments (3).",
+   "States 3 qualifying shipments and $60 total refund."
+  ],
+  "facts": "8 shipments promised in October were late (delay_days > 0). Policy is chosen by promised_date: v1 (to 2026-10-14) needs delay_days > 5, v2 (from 2026-10-15) needs delay_days > 3. Weather never qualifies. Eligible: SH-NW-5472-L-R02 (v1, 6 days), R04 (v2, 4 days), R07 (v2, 5 days) = 3 shipments, $60. Traps: R01 promised Oct 12 (v1) delayed 4 but delivered after Oct 15; R03 v1 delayed exactly 5; R06 v2 delayed exactly 3; R05 and R08 weather.",
+  "agent": "nodefs"
+ },
+ {
+  "qid": "nodefs-refunds-control-open",
+  "case": "refunds",
+  "version": "control",
+  "level": "nodefs",
+  "network": "NW-8045",
+  "question": "What will late-delivery refunds cost for network NW-8045 shipments with a promised date in October 2026?",
+  "criteria": [
+   "Selects the policy by each shipment's promised date (v2 for every late shipment, because every late shipment was promised on or after 15 October).",
+   "Applies the strict threshold (greater than, not greater than or equal) and excludes weather delays.",
+   "Identifies the correct number of qualifying shipments (6).",
+   "States 6 qualifying shipments and $120 total refund."
+  ],
+  "facts": "8 shipments promised in October were late. All 8 late shipments have promised dates on or after 2026-10-15, so v2 (delay_days > 3) applies to each of them. The on-time shipments span both policies but cannot qualify because they are not late. Weather excluded. Eligible: C01 to C06 = 6 shipments, $120. C07 is weather, C08 delayed exactly 3.",
+  "agent": "nodefs"
+ },
+ {
+  "qid": "partial-reversal-directed",
+  "agent": "r2",
+  "case": "partial",
+  "version": "reversal",
+  "level": "directed",
+  "network": "NW-6731",
+  "question": "For network NW-6731, compare shipment volume in September and October 2026. Check which dates each month's data covers, and compare shipments per day. Did volume fall?",
+  "criteria": [
+   "Reports 900 shipments in September and 600 in October.",
+   "States that NW-6731's October data ends on 15 October, or that it covers only half the month.",
+   "Compares on a like-for-like basis, e.g., 30 versus 40 shipments per day, or 450 versus 600 shipments in the first 15 days.",
+   "Concludes that volume did not fall on a comparable basis (it rose), and that the October total is incomplete."
+  ],
+  "facts": "September: 900 shipments shipped 1 to 30 September (30 per day). October: 600 shipments, but October data for NW-6731 ends on 15 October (40 per day). 1 to 15 September had 450 shipments. Other networks have October data to the end of the month. On a comparable basis volume rose by a third."
+ },
+ {
+  "qid": "partial-reversal-open",
+  "agent": "r2",
+  "case": "partial",
+  "version": "reversal",
+  "level": "open",
+  "network": "NW-6731",
+  "question": "How did shipment volume in network NW-6731 change from September to October 2026? Support your conclusion.",
+  "criteria": [
+   "Reports 900 shipments in September and 600 in October.",
+   "States that NW-6731's October data ends on 15 October, or that it covers only half the month.",
+   "Compares on a like-for-like basis, e.g., 30 versus 40 shipments per day, or 450 versus 600 shipments in the first 15 days.",
+   "Concludes that volume did not fall on a comparable basis (it rose), and that the October total is incomplete."
+  ],
+  "facts": "September: 900 shipments shipped 1 to 30 September (30 per day). October: 600 shipments, but October data for NW-6731 ends on 15 October (40 per day). 1 to 15 September had 450 shipments. Other networks have October data to the end of the month. On a comparable basis volume rose by a third."
+ },
+ {
+  "qid": "partial-control-directed",
+  "agent": "r2",
+  "case": "partial",
+  "version": "control",
+  "level": "directed",
+  "network": "NW-2290",
+  "question": "For network NW-2290, compare shipment volume in September and October 2026. Check which dates each month's data covers, and compare shipments per day. Did volume fall?",
+  "criteria": [
+   "Reports 900 shipments in September and 600 in October.",
+   "States that October data covers the whole month, to 31 October.",
+   "Compares shipments per day or otherwise confirms the months are comparable (30 versus about 19.4 per day).",
+   "Concludes that volume fell."
+  ],
+  "facts": "September: 900 shipments over 30 days (30 per day). October: 600 shipments over 1 to 31 October (about 19.4 per day). Both months are complete. Volume really fell by a third."
+ },
+ {
+  "qid": "partial-control-open",
+  "agent": "r2",
+  "case": "partial",
+  "version": "control",
+  "level": "open",
+  "network": "NW-2290",
+  "question": "How did shipment volume in network NW-2290 change from September to October 2026? Support your conclusion.",
+  "criteria": [
+   "Reports 900 shipments in September and 600 in October.",
+   "States that October data covers the whole month, to 31 October.",
+   "Compares shipments per day or otherwise confirms the months are comparable (30 versus about 19.4 per day).",
+   "Concludes that volume fell."
+  ],
+  "facts": "September: 900 shipments over 30 days (30 per day). October: 600 shipments over 1 to 31 October (about 19.4 per day). Both months are complete. Volume really fell by a third."
+ },
+ {
+  "qid": "duplicate-reversal-directed",
+  "agent": "r2",
+  "case": "duplicate",
+  "version": "reversal",
+  "level": "directed",
+  "network": "NW-9154",
+  "question": "For network NW-9154, compare shipment volume in September and October 2026. Check for shipment_id values that appear more than once, and count each shipment once. Did volume grow?",
+  "criteria": [
+   "Reports September volume as 1,000 shipments.",
+   "Identifies that October rows are duplicated: each of 1,000 shipments appears twice, from two loads.",
+   "Reports October volume as 1,000 distinct shipments.",
+   "Concludes that volume stayed flat and that the apparent doubling comes from the duplicate load."
+  ],
+  "facts": "September: 1,000 shipments. October: 2,000 rows but only 1,000 distinct shipment_id values. Every October shipment was written twice, by loads B-202610 and B-202610-reload. Volume was flat."
+ },
+ {
+  "qid": "duplicate-reversal-open",
+  "agent": "r2",
+  "case": "duplicate",
+  "version": "reversal",
+  "level": "open",
+  "network": "NW-9154",
+  "question": "How did shipment volume in network NW-9154 change from September to October 2026? Support your conclusion.",
+  "criteria": [
+   "Reports September volume as 1,000 shipments.",
+   "Identifies that October rows are duplicated: each of 1,000 shipments appears twice, from two loads.",
+   "Reports October volume as 1,000 distinct shipments.",
+   "Concludes that volume stayed flat and that the apparent doubling comes from the duplicate load."
+  ],
+  "facts": "September: 1,000 shipments. October: 2,000 rows but only 1,000 distinct shipment_id values. Every October shipment was written twice, by loads B-202610 and B-202610-reload. Volume was flat."
+ },
+ {
+  "qid": "duplicate-control-directed",
+  "agent": "r2",
+  "case": "duplicate",
+  "version": "control",
+  "level": "directed",
+  "network": "NW-4486",
+  "question": "For network NW-4486, compare shipment volume in September and October 2026. Check for shipment_id values that appear more than once, and count each shipment once. Did volume grow?",
+  "criteria": [
+   "Reports September volume as 1,000 shipments.",
+   "Confirms that no shipment_id appears twice, or counts distinct shipments and gets the same totals.",
+   "Reports October volume as 2,000 distinct shipments.",
+   "Concludes that volume doubled."
+  ],
+  "facts": "September: 1,000 shipments. October: 2,000 distinct shipments from one load. No shipment_id appears twice. Volume really doubled."
+ },
+ {
+  "qid": "duplicate-control-open",
+  "agent": "r2",
+  "case": "duplicate",
+  "version": "control",
+  "level": "open",
+  "network": "NW-4486",
+  "question": "How did shipment volume in network NW-4486 change from September to October 2026? Support your conclusion.",
+  "criteria": [
+   "Reports September volume as 1,000 shipments.",
+   "Confirms that no shipment_id appears twice, or counts distinct shipments and gets the same totals.",
+   "Reports October volume as 2,000 distinct shipments.",
+   "Concludes that volume doubled."
+  ],
+  "facts": "September: 1,000 shipments. October: 2,000 distinct shipments from one load. No shipment_id appears twice. Volume really doubled."
+ },
+ {
+  "qid": "testparcels-reversal-directed",
+  "agent": "r2",
+  "case": "testparcels",
+  "version": "reversal",
+  "level": "directed",
+  "network": "NW-3378",
+  "question": "For network NW-3378, compare the average delivery time in September and October 2026 for customer shipments only, leaving out internal test parcels (is_test). Did delivery time improve?",
+  "criteria": [
+   "Identifies the test parcels: 1,000 in October and none in September.",
+   "Reports the customer-only average for both months, 5.0 and 5.5 days.",
+   "Explains that the test parcels pull the October average over all rows down to 3.25 days.",
+   "Concludes that delivery for customers got slower, not faster."
+  ],
+  "facts": "September: 1,000 customer shipments, average 5.0 days, no test parcels. October: 1,000 customer shipments averaging 5.5 days plus 1,000 one-day test parcels (is_test TRUE). The average over all rows falls from 5.0 to 3.25 days. Customer delivery got slower."
+ },
+ {
+  "qid": "testparcels-reversal-open",
+  "agent": "r2",
+  "case": "testparcels",
+  "version": "reversal",
+  "level": "open",
+  "network": "NW-3378",
+  "question": "Did delivery performance in network NW-3378 improve from September to October 2026? Support your conclusion.",
+  "criteria": [
+   "Identifies the test parcels: 1,000 in October and none in September.",
+   "Reports the customer-only average for both months, 5.0 and 5.5 days.",
+   "Explains that the test parcels pull the October average over all rows down to 3.25 days.",
+   "Concludes that delivery for customers got slower, not faster."
+  ],
+  "facts": "September: 1,000 customer shipments, average 5.0 days, no test parcels. October: 1,000 customer shipments averaging 5.5 days plus 1,000 one-day test parcels (is_test TRUE). The average over all rows falls from 5.0 to 3.25 days. Customer delivery got slower."
+ },
+ {
+  "qid": "testparcels-control-directed",
+  "agent": "r2",
+  "case": "testparcels",
+  "version": "control",
+  "level": "directed",
+  "network": "NW-7712",
+  "question": "For network NW-7712, compare the average delivery time in September and October 2026 for customer shipments only, leaving out internal test parcels (is_test). Did delivery time improve?",
+  "criteria": [
+   "Identifies the test parcels: 100 in each month.",
+   "Reports the customer-only average for both months, 5.0 and 4.0 days.",
+   "Shows that the improvement holds without the test parcels.",
+   "Concludes that delivery improved."
+  ],
+  "facts": "Each month has 100 one-day test parcels. Customer shipments average 5.0 days in September and 4.0 in October. The average over all rows falls from 4.64 to 3.73. The improvement is real."
+ },
+ {
+  "qid": "testparcels-control-open",
+  "agent": "r2",
+  "case": "testparcels",
+  "version": "control",
+  "level": "open",
+  "network": "NW-7712",
+  "question": "Did delivery performance in network NW-7712 improve from September to October 2026? Support your conclusion.",
+  "criteria": [
+   "Identifies the test parcels: 100 in each month.",
+   "Reports the customer-only average for both months, 5.0 and 4.0 days.",
+   "Shows that the improvement holds without the test parcels.",
+   "Concludes that delivery improved."
+  ],
+  "facts": "Each month has 100 one-day test parcels. Customer shipments average 5.0 days in September and 4.0 in October. The average over all rows falls from 4.64 to 3.73. The improvement is real."
+ },
+ {
+  "qid": "zonemix-reversal-directed",
+  "agent": "r2",
+  "case": "zonemix",
+  "version": "reversal",
+  "level": "directed",
+  "network": "NW-5809",
+  "question": "For network NW-5809, compare the complaint rate in September and October 2026 overall and within each service zone, and each zone's share of shipments. What do they show?",
+  "criteria": [
+   "Reports the overall complaint rate, 3.2% in September and 5.8% in October.",
+   "Reports the rate in each zone: local 2% to 1%, remote 8% to 7%.",
+   "Reports the zone mix shift (local share 80% to 20%) and explains that it raises the overall rate.",
+   "Concludes that the complaint rate improved within each zone, and that the overall rise comes from the shift toward remote parcels."
+  ],
+  "facts": "Overall complaint rate: 32 of 1,000 (3.2%) in September, 58 of 1,000 (5.8%) in October. Local: 2% to 1%. Remote: 8% to 7%. Local share of shipments: 80% to 20%. Remote parcels draw more complaints, so the mix shift raises the overall rate while both zones improve."
+ },
+ {
+  "qid": "zonemix-reversal-open",
+  "agent": "r2",
+  "case": "zonemix",
+  "version": "reversal",
+  "level": "open",
+  "network": "NW-5809",
+  "question": "Is the complaint rate in network NW-5809 getting worse from September to October 2026? Support your conclusion.",
+  "criteria": [
+   "Reports the overall complaint rate, 3.2% in September and 5.8% in October.",
+   "Reports the rate in each zone: local 2% to 1%, remote 8% to 7%.",
+   "Reports the zone mix shift (local share 80% to 20%) and explains that it raises the overall rate.",
+   "Concludes that the complaint rate improved within each zone, and that the overall rise comes from the shift toward remote parcels."
+  ],
+  "facts": "Overall complaint rate: 32 of 1,000 (3.2%) in September, 58 of 1,000 (5.8%) in October. Local: 2% to 1%. Remote: 8% to 7%. Local share of shipments: 80% to 20%. Remote parcels draw more complaints, so the mix shift raises the overall rate while both zones improve."
+ },
+ {
+  "qid": "zonemix-control-directed",
+  "agent": "r2",
+  "case": "zonemix",
+  "version": "control",
+  "level": "directed",
+  "network": "NW-1263",
+  "question": "For network NW-1263, compare the complaint rate in September and October 2026 overall and within each service zone, and each zone's share of shipments. What do they show?",
+  "criteria": [
+   "Reports the overall complaint rate, 3.2% in September and 4.4% in October.",
+   "Reports the rate in each zone: local 2% to 3%, remote 8% to 10%.",
+   "Reports that the zone mix did not change (local 80% in both months).",
+   "Concludes that the complaint rate got worse in both zones."
+  ],
+  "facts": "Overall complaint rate: 3.2% in September, 4.4% in October. Local: 2% to 3%. Remote: 8% to 10%. Local share 80% in both months. The rate got worse in both zones."
+ },
+ {
+  "qid": "zonemix-control-open",
+  "agent": "r2",
+  "case": "zonemix",
+  "version": "control",
+  "level": "open",
+  "network": "NW-1263",
+  "question": "Is the complaint rate in network NW-1263 getting worse from September to October 2026? Support your conclusion.",
+  "criteria": [
+   "Reports the overall complaint rate, 3.2% in September and 4.4% in October.",
+   "Reports the rate in each zone: local 2% to 3%, remote 8% to 10%.",
+   "Reports that the zone mix did not change (local 80% in both months).",
+   "Concludes that the complaint rate got worse in both zones."
+  ],
+  "facts": "Overall complaint rate: 3.2% in September, 4.4% in October. Local: 2% to 3%. Remote: 8% to 10%. Local share 80% in both months. The rate got worse in both zones."
+ }
+]

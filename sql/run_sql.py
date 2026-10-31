@@ -4,7 +4,8 @@ from databricks.sdk import WorkspaceClient
 
 PROFILE = os.environ.get("DATABRICKS_CONFIG_PROFILE")
 WAREHOUSE = os.environ["WAREHOUSE_ID"]
-CATALOG, SCHEMA = os.environ.get("MERIDIAN_CATALOG", "serverless_lakebase_praneeth_catalog"), "meridian_parcel"
+CATALOG = os.environ.get("MERIDIAN_CATALOG", "serverless_lakebase_praneeth_catalog")
+SCHEMA = os.environ.get("MERIDIAN_SCHEMA", "meridian_parcel")
 
 w = WorkspaceClient(profile=PROFILE)
 text = "\n".join(l for l in open(sys.argv[1]).read().splitlines() if not l.strip().startswith("--"))

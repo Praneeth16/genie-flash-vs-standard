@@ -4,12 +4,12 @@ import requests
 from databricks.sdk import WorkspaceClient
 
 PROFILE = os.environ.get("DATABRICKS_CONFIG_PROFILE")
-SPACE_ID = os.environ["GENIE_SPACE_ID"]
+SPACE_ID = os.environ.get("GENIE_SPACE_ID")
 
 _w = WorkspaceClient(profile=PROFILE)
 
-def ask(question, mode, timeout=300):
-    url = f"{_w.config.host}/api/2.0/genie/agents/{SPACE_ID}/responses"
+def ask(question, mode, timeout=300, space_id=None):
+    url = f"{_w.config.host}/api/2.0/genie/agents/{space_id or SPACE_ID}/responses"
     body = {"input": [{"type": "message", "role": "user", "content": [{"type": "input_text", "text": question}]}],
             "execution_mode": mode, "enable_viz": False}
     headers = {**_w.config.authenticate(), "Accept": "text/event-stream", "Content-Type": "application/json"}

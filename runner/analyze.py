@@ -4,19 +4,23 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-key = {q["qid"]: q for q in json.loads((ROOT / "runner/answer_key.json").read_text())}
-raw = {(r["qid"], r["repeat"], r["mode"]): r for r in map(json.loads, (ROOT / "results/raw.jsonl").read_text().splitlines())}
-grades = {(g["qid"], g["repeat"], g["mode"]): g for g in map(json.loads, (ROOT / "results/grades.jsonl").read_text().splitlines())}
+import os
+KEY_PATH, RAW_PATH = os.environ.get("KEY", "runner/answer_key.json"), os.environ.get("RAW", "results/raw.jsonl")
+GRADES_PATH, SUMMARY_PATH = os.environ.get("GRADES", "results/grades.jsonl"), os.environ.get("SUMMARY", "results/summary.json")
+key = {q["qid"]: q for q in json.loads((ROOT / KEY_PATH).read_text())}
+raw = {(r["qid"], r["repeat"], r["mode"]): r for r in map(json.loads, (ROOT / RAW_PATH).read_text().splitlines())}
+grades = {(g["qid"], g["repeat"], g["mode"]): g for g in map(json.loads, (ROOT / GRADES_PATH).read_text().splitlines())}
 assert set(raw) == set(grades), (len(raw), len(grades))
 # Manual adjudications of inconsistent judge verdicts, logged with reasons in notes/adjudications.json.
-ADJ = ROOT / "notes/adjudications.json"
+ADJ = ROOT / os.environ.get("ADJ", "notes/adjudications.json")
 for a in (json.loads(ADJ.read_text()) if ADJ.exists() else []):
     g = grades[(a["qid"], a["repeat"], a["mode"])]
     for c, v in zip(g["criteria"], a["criteria"]):
         c["pass"] = v
     g["unsupported_claims"] = a.get("unsupported_claims", g["unsupported_claims"])
     g["passed"] = all(a["criteria"])
-MODES, LEVELS = ["FLASH", "STANDARD"], ["lookup", "directed", "open", "missing"]
+MODES = ["FLASH", "STANDARD"]
+LEVELS = list(dict.fromkeys(q["level"] for q in key.values()))
 
 def pct(xs, p):
     xs = sorted(xs)
@@ -125,4 +129,4 @@ for _ in range(10000):
 summary["open_diff_ci95"] = [round(pct(diffs, 0.025), 3), round(pct(diffs, 0.975), 3)]
 print("\nopen pass-rate difference Standard - Flash, 95% question bootstrap", summary["open_diff_ci95"])
 
-(ROOT / "results/summary.json").write_text(json.dumps(summary, indent=1))
+(ROOT / SUMMARY_PATH).write_text(json.dumps(summary, indent=1))
