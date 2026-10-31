@@ -9,12 +9,14 @@ Alt text: Animation of 1,000 parcels. The local share grows from 20% to 80% whil
 
 ## What is this article about?
 
-Genie Agent mode now has a lightning button next to the Agent button. Switch it on and you get Flash, which spends less time reasoning and answers faster. Leave it off and you get standard Agent mode, which takes longer and digs deeper. I will call them Flash and Standard. [1] [2]
+Genie Agent mode can now answer a question in [two ways](https://docs.databricks.com/aws/en/ai-bi/release-notes/2026). If you switch on the lightning button next to Agent, you get Flash, which spends less time reasoning and answers faster. If you leave it off, you get standard Agent mode, which takes longer and checks more. I will call them Flash and Standard.
+
+Databricks [recommends Flash for simpler tasks](https://docs.databricks.com/aws/en/genie-agents/concepts). But my questions don't arrive labelled "simple" or "hard", so I kept wondering what I get when I wait for Standard. Is it a better answer, or only a longer one?
+
+This article is my attempt to find out. I built a small fake company with traps hidden in its data. Then I asked both modes the same questions five times each over two rounds, and compared what they checked, what they concluded and how long they took.
 
 [IMAGE: screenshots/01-flash-toggle.png]
 Alt text: The Genie agent "Meridian Parcel Operations" with the open delivery question typed in. Agent is selected and the lightning button for Flash is switched on.
-
-That button raised a question for me. When I wait for Standard, am I waiting for a better answer, or only a longer one? Databricks recommends Flash for simpler tasks, but questions don't arrive labelled "simple" or "hard". So I built a small fake company with traps in its data, asked both modes the same questions five times each over two rounds, and compared what they checked, what they concluded and how long they took.
 
 ## Where did the idea come from?
 
@@ -141,7 +143,7 @@ After this test, here is how I plan to choose:
 
 If you build Genie agents, write the checks your users often need into the agent's instructions, such as breaking a number down by zone or checking that a month is complete. Flash might then make them too. I have not tested that yet.
 
-Snell and colleagues found that how much extra thinking time helps depends on how hard the problem is. [3] In my test, Standard's extra time made the biggest difference when the question left the hard part to the agent.
+[Snell and colleagues](https://arxiv.org/abs/2408.03314) found that how much extra thinking time helps depends on how hard the problem is. In my test, Standard's extra time made the biggest difference when the question left the hard part to the agent.
 
 ## What can't this test tell you?
 
