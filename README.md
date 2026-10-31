@@ -17,6 +17,24 @@ The gap on open questions comes from the delivery case. There, the overall avera
 
 ![Pass rate by question level](figures/fig2-pass-by-level.png)
 
+### Round 2 (harder, pre-registered)
+
+The round 2 answer key and data were committed (584272a) before any round 2 request ran. 200 requests, 20 questions:
+
+- Part A asked the round 1 complaint and refund open questions of an agent whose instructions do not define complaint rate or refund rules. Flash passed 19/20 and Standard 20/20, so the instructions were not why Flash handled them.
+- Part B added four traps the instructions never mention, each with a control: partial month, duplicate load, test parcels, and zone mix on complaint rate.
+
+| Round 2 | Flash | Standard | Median time (Flash / Standard) |
+|---|---|---|---|
+| Directed, correct conclusion | 38/40 | 40/40 | 14.2s / 15.3s |
+| Open, all four checks | 0/40 | 21/40 | 11.2s / 26.3s |
+| Open, correct conclusion | 20/40 | 30/40 | |
+| Open reversal, partial + duplicate + zone mix, correct conclusion | 0/15 | 10/15 | |
+
+The test parcel trap caught neither mode: both read the `is_test` column comment and excluded test parcels. Full numbers are in `results/summary_r2.json` and `results/analysis_r2.txt`.
+
+![Round 2 open questions](figures/fig5-round2-open.png)
+
 ## Layout
 
 - `article/draft.md` is the article. `medium/` holds the Medium build script, publish notes and the hero image prompt.
@@ -30,6 +48,13 @@ The gap on open questions comes from the delivery case. There, the overall avera
 - `results/raw.jsonl` holds every response with its SQL and timing. Workspace hostnames are replaced with `<workspace-host>`. `results/grades.jsonl` holds every verdict.
 - `notes/` holds the judge audit, the run incident log and the answer-key change log.
 - `figures/` and `screenshots/` hold the images used in the article. `figures/make_*.py` regenerate the charts.
+
+## Round 2 files
+
+- `sql/03_build_round2.sql` builds `meridian_parcel_r2` (round 1 data plus 8 networks). `sql/04_ground_truth_round2.sql` and `notes/ground_truth_round2_output.txt` verify it.
+- `runner/answer_key_r2.py` defines the 20 round 2 questions. `results/round2_spaces.txt` lists the two round 2 agents.
+- `results/raw_r2.jsonl`, `results/grades_r2.jsonl`, `results/summary_r2.json`, `results/analysis_r2.txt`.
+- Run round 2 with `KEY=runner/answer_key_r2.json RAW=results/raw_r2.jsonl GRADES=results/grades_r2.jsonl SUMMARY=results/summary_r2.json ADJ=notes/adjudications_r2.json` plus `GENIE_SPACE_R2` and `GENIE_SPACE_NODEFS`. Build the round 2 agent with `MERIDIAN_SCHEMA=meridian_parcel_r2` and the no-definitions agent with `AGENT_VARIANT=nodefs`.
 
 ## Run it on your own workspace
 

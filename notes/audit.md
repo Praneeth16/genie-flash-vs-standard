@@ -15,3 +15,11 @@ Notable cases found in the audit:
 - missing-paid: by exact phrase, 4 Standard responses (r1, r2, r3, r5) and 2 Flash responses (r1, r2) stated the $60 as paid out.
 
 This audit was done on the first full grading pass (results/grades_v1.jsonl). The final pass (results/grades.jsonl) agrees with it on 276 of 280 pass/fail verdicts.
+
+## Round 2 audit (2026-10-31)
+
+Read in full: partial-reversal-open r1 Flash, testparcels-reversal-open r1 Flash, testparcels-reversal-directed r1 Standard, zonemix-control-open r1 Standard, duplicate-reversal-open r1 Flash, duplicate-reversal-directed r2 Standard, and the opening of every zone-mix open response (20). No verdict overturned.
+
+- Test parcel criteria 1 and 3 require stating the number of test parcels and their effect on the all-rows average. Responses that only filtered `is_test` fail them even with the right conclusion. That is why the article leads round 2 with the correct-conclusion rate.
+- duplicate-reversal-directed criterion 2 requires naming the two loads. Standard r2 found the duplicates but called the cause a "data-loading artifact" and failed it.
+- zonemix-control-open: Flash said "worse" in all 5 runs but never split by zone, so it fails criterion 4 ("worse in both zones"). Standard r1 and r5 ran a significance test and declined to call it worse.

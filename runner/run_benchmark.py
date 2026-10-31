@@ -31,6 +31,8 @@ def run_pair(item):
     for pos, mode in enumerate(modes):
         if (q["qid"], rep, mode) in done:
             continue
+        if q.get("agent") and not SPACES.get(q["agent"]):
+            raise SystemExit(f"set the Genie space for agent {q['agent']}")
         space = SPACES.get(q.get("agent")) or SPACE_ID
         r = ask(q["question"], mode, space_id=space)
         r.update(qid=q["qid"], repeat=rep, pair_index=i, position_in_pair=pos, space_id=space)

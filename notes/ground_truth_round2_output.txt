@@ -32,6 +32,6 @@ NW-1263 | 2026-09-01 | 1000 | 32 | 0.032
 NW-1263 | 2026-10-01 | 1000 | 44 | 0.044
 NW-5809 | 2026-09-01 | 1000 | 32 | 0.032
 NW-5809 | 2026-10-01 | 1000 | 58 | 0.058
-SUCCEEDED SELECT (SELECT count(*) FROM shipments WHERE NOT is_test AND load_batch_id NOT LIKE '%relo
+SUCCEEDED SELECT (SELECT count(*) FROM shipments WHERE network_id IN (SELECT network_id FROM meridia
 r2_rows | r1_rows
-25096 | 9096
+9096 | 9096

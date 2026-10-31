@@ -1,0 +1,55 @@
+requests 200 technical failures {'FLASH': 0, 'STANDARD': 0}
+
+PASS RATE (all four criteria)
+  nodefs    FLASH 19/20 (95%) | STANDARD 20/20 (100%)
+  directed  FLASH 24/40 (60%) | STANDARD 27/40 (68%)
+  open      FLASH 0/40 (0%) | STANDARD 21/40 (52%)
+  all       FLASH 43/100 (43%) | STANDARD 68/100 (68%)
+
+CORRECT CONCLUSION (criterion 4, directed and open)
+  directed  FLASH 38/40 (95%) | STANDARD 40/40 (100%)
+  open      FLASH 20/40 (50%) | STANDARD 30/40 (75%)
+
+PASS BY QUESTION (of 5)
+  nodefs-complaints-reversal-open Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  nodefs-complaints-control-open Flash 4  Standard 5   crit F[5, 4, 5, 5] S[5, 5, 5, 5]
+  nodefs-refunds-reversal-open   Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  nodefs-refunds-control-open    Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  partial-reversal-directed      Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  partial-reversal-open          Flash 0  Standard 5   crit F[5, 0, 0, 0] S[5, 5, 5, 5]
+  partial-control-directed       Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  partial-control-open           Flash 0  Standard 3   crit F[5, 0, 0, 5] S[5, 3, 4, 5]
+  duplicate-reversal-directed    Flash 0  Standard 1   crit F[5, 0, 5, 4] S[5, 1, 5, 5]
+  duplicate-reversal-open        Flash 0  Standard 2   crit F[5, 0, 0, 0] S[5, 2, 2, 2]
+  duplicate-control-directed     Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  duplicate-control-open         Flash 0  Standard 2   crit F[5, 0, 5, 5] S[5, 2, 5, 5]
+  testparcels-reversal-directed  Flash 0  Standard 0   crit F[0, 5, 0, 5] S[0, 5, 0, 5]
+  testparcels-reversal-open      Flash 0  Standard 1   crit F[0, 5, 0, 5] S[1, 5, 1, 5]
+  testparcels-control-directed   Flash 0  Standard 1   crit F[0, 5, 5, 5] S[1, 5, 5, 5]
+  testparcels-control-open       Flash 0  Standard 5   crit F[0, 5, 3, 5] S[5, 5, 5, 5]
+  zonemix-reversal-directed      Flash 4  Standard 5   crit F[5, 5, 5, 4] S[5, 5, 5, 5]
+  zonemix-reversal-open          Flash 0  Standard 3   crit F[5, 0, 0, 0] S[5, 3, 3, 3]
+  zonemix-control-directed       Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  zonemix-control-open           Flash 0  Standard 0   crit F[5, 0, 0, 0] S[5, 1, 1, 0]
+
+PAIRED OUTCOMES (qid, repeat)
+  nodefs    {'both pass': 19, 'Standard only': 1}
+  directed  {'both pass': 24, 'both fail': 13, 'Standard only': 3}
+  open      {'Standard only': 21, 'both fail': 19}
+  all       {'both pass': 43, 'Standard only': 25, 'both fail': 32}
+
+COMPLETION TIME, completed requests (seconds)
+  nodefs    FLASH median 17.5 p90 27.9 | STANDARD median 23.5 p90 33.3
+  directed  FLASH median 14.2 p90 21.6 | STANDARD median 15.3 p90 30.6
+  open      FLASH median 11.2 p90 17.4 | STANDARD median 26.3 p90 35.7
+  all       FLASH median 13.4 p90 24.3 | STANDARD median 18.8 p90 33.2
+
+paired time ratio Standard/Flash {'median': 1.39, 'p10': 0.63, 'p90': 3.01, 'share_standard_slower': 0.76, 'n': 100}
+
+SQL CALLS, WORDS, UNSUPPORTED CLAIMS
+  nodefs    FLASH {'sql_mean': 2, 'words_median': 122.0, 'unsupported_total': 3, 'responses_with_unsupported': 3} | STANDARD {'sql_mean': 3.2, 'words_median': 214.5, 'unsupported_total': 6, 'responses_with_unsupported': 5}
+  directed  FLASH {'sql_mean': 1, 'words_median': 117.5, 'unsupported_total': 14, 'responses_with_unsupported': 11} | STANDARD {'sql_mean': 2.05, 'words_median': 159.0, 'unsupported_total': 18, 'responses_with_unsupported': 13}
+  open      FLASH {'sql_mean': 1.25, 'words_median': 81.5, 'unsupported_total': 20, 'responses_with_unsupported': 15} | STANDARD {'sql_mean': 3.7, 'words_median': 231.5, 'unsupported_total': 20, 'responses_with_unsupported': 12}
+  all       FLASH {'sql_mean': 1.3, 'words_median': 96.0, 'unsupported_total': 37, 'responses_with_unsupported': 29} | STANDARD {'sql_mean': 2.94, 'words_median': 199.0, 'unsupported_total': 44, 'responses_with_unsupported': 30}
+
+open pass-rate difference Standard - Flash, 95% question bootstrap [0.3, 0.75]

@@ -12,7 +12,7 @@ raw = {(r["qid"], r["repeat"], r["mode"]): r for r in map(json.loads, (ROOT / RA
 grades = {(g["qid"], g["repeat"], g["mode"]): g for g in map(json.loads, (ROOT / GRADES_PATH).read_text().splitlines())}
 assert set(raw) == set(grades), (len(raw), len(grades))
 # Manual adjudications of inconsistent judge verdicts, logged with reasons in notes/adjudications.json.
-ADJ = ROOT / os.environ.get("ADJ", "notes/adjudications.json")
+ADJ = ROOT / os.environ.get("ADJ", "notes/adjudications.json" if KEY_PATH == "runner/answer_key.json" else "notes/none.json")
 for a in (json.loads(ADJ.read_text()) if ADJ.exists() else []):
     g = grades[(a["qid"], a["repeat"], a["mode"])]
     for c, v in zip(g["criteria"], a["criteria"]):

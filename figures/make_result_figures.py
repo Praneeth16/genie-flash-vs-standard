@@ -105,3 +105,24 @@ fig.tight_layout(rect=(0, 0.05, 1, 0.9))
 fig.savefig(OUT / "fig4-completion-time.png", dpi=200)
 plt.close(fig)
 print("ok")
+
+# Figure 5: round 2 open questions, correct conclusions out of 5
+R2 = ROOT / "results/summary_r2.json"
+if R2.exists():
+    S2 = json.loads(R2.read_text())
+    key2 = {q["qid"]: q for q in json.loads((ROOT / "runner/answer_key_r2.json").read_text())}
+    label2 = {"partial": "Partial month", "duplicate": "Duplicate rows", "testparcels": "Test parcels", "zonemix": "Zone mix, complaint rate"}
+    open2 = [q for q in key2 if key2[q]["level"] == "open"]
+    labels = [f"{label2[key2[q]['case']]}, {key2[q]['network']} ({key2[q]['version']})" for q in open2]
+    fig, ax = plt.subplots(figsize=(12, 6))
+    vals = {m: [S2["by_question"][q]["criteria"][m][3] for q in open2] for m in COLOR}
+    dots(ax, labels, vals, [5] * len(open2), 5, lambda v, n: f"{v}/5")
+    ax.set_xlim(-1.2, 7.4)
+    ax.set_xticks(range(6))
+    ax.set_xlabel("Responses with the correct conclusion (criterion 4), out of 5")
+    fig.suptitle("Round 2, open questions: traps the instructions never mention", x=0.02, ha="left", y=0.96, fontsize=15, weight="bold", color=INK)
+    legend(fig)
+    fig.text(0.02, 0.02, "Synthetic Meridian Parcel benchmark, round 2, 31 October 2026. 5 requests per question per mode.", color=INK2, fontsize=10.5)
+    fig.tight_layout(rect=(0, 0.04, 1, 0.92))
+    fig.savefig(OUT / "fig5-round2-open.png", dpi=200)
+    plt.close(fig)

@@ -1,0 +1,6 @@
+[
+ {"qid": "duplicate-control-open", "repeat": 3, "mode": "FLASH", "criteria": [true, false, true, true],
+  "reason": "Criterion 3 asks for the October volume (2,000). Repeats 1, 2, 4 and 5 report the same 2,000 from COUNT(*) and pass criterion 3. Whether uniqueness was checked is criterion 2, which this response fails. Applied the same standard."},
+ {"qid": "duplicate-reversal-directed", "repeat": 5, "mode": "FLASH", "criteria": [true, false, true, true],
+  "reason": "Concludes 'No change' and shows 2,000 raw rows against 1,000 unique shipments in a table. Repeat 4 makes the same point in prose and passes criterion 4. Applied the same standard."}
+]
