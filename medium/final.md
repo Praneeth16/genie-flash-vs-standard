@@ -49,7 +49,7 @@ I also added four questions the data cannot answer, such as how many customers h
 
 Before the run, I wrote four checks for every question. For the open NW-4127 question, a response had to report the overall average, report each zone's average, explain the mix, and conclude that delivery did not improve. It passed only if it did all four.
 
-A judge model, Claude Opus 5.5 on Databricks, graded every response against those checks without knowing which mode wrote it. I read 55 of the graded responses myself. I also asked Codex to review my work, and it found a mistake in my answer key for one refund question. I fixed it and regraded everything. The repo at the end has every response, every verdict and both Codex reviews.
+A judge model, Claude Opus 5.5 on Databricks, graded every response against those checks without knowing which mode wrote it. I read 55 of the graded responses myself. I also asked Codex to review my work, and it found a mistake in my answer key for one refund question. I fixed it and regraded everything. The repo at the end has every response, every verdict and all three Codex reviews.
 
 ## Where did Flash and Standard agree?
 
