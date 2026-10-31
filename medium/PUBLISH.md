@@ -11,7 +11,7 @@ Before you publish:
 2. Subtitle. In publish settings, paste the italic line as the story preview subtitle. Optionally delete the italic line from the body.
 3. Medium turned straight quotes into curly quotes. That is Medium's default and is fine.
 4. Read the GIF once in preview. It loops from September (20% local) to October (80% local).
-5. Decide on the reproducibility line near the end. It says "I can share the data generator...". Replace it with a GitHub link if you publish this folder.
+5. The reproducibility line links to https://github.com/Praneeth16/genie-flash-vs-standard.
 6. Topics: Databricks, AI Agents, Data Analytics, Artificial Intelligence, LLM. Do not put the story behind the paywall if it is for the Genie content push.
 7. Screenshots show only the Meridian Parcel agent and synthetic data. No customer names. The workspace header is cropped out.
 

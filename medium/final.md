@@ -182,7 +182,7 @@ For an agent author, the delivery result suggests a second option. If a common q
 
 The practical question stays the same as in the opening. Further investigation helps when it changes the conclusion. In this run it changed the conclusion on the open delivery questions. It did not change the conclusion on lookups, directed questions, complaint rates or refund policies.
 
-If you want to run the same test on your own Genie agent, I can share the data generator, questions, answer key, runner and judge prompt.
+The data generator, questions, answer key, runner, raw responses, judge verdicts and both Codex reviews are in [github.com/Praneeth16/genie-flash-vs-standard](https://github.com/Praneeth16/genie-flash-vs-standard). You can rerun the test on your own Genie agent.
 
 ## Sources
 
