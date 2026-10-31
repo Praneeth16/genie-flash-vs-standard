@@ -1,0 +1,759 @@
+{
+ "n_requests": 280,
+ "failures": {
+  "FLASH": 0,
+  "STANDARD": 0
+ },
+ "pass": {
+  "lookup": {
+   "FLASH": {
+    "passed": 40,
+    "n": 40
+   },
+   "STANDARD": {
+    "passed": 39,
+    "n": 40
+   }
+  },
+  "directed": {
+   "FLASH": {
+    "passed": 36,
+    "n": 40
+   },
+   "STANDARD": {
+    "passed": 40,
+    "n": 40
+   }
+  },
+  "open": {
+   "FLASH": {
+    "passed": 26,
+    "n": 40
+   },
+   "STANDARD": {
+    "passed": 37,
+    "n": 40
+   }
+  },
+  "missing": {
+   "FLASH": {
+    "passed": 3,
+    "n": 20
+   },
+   "STANDARD": {
+    "passed": 5,
+    "n": 20
+   }
+  },
+  "all": {
+   "FLASH": {
+    "passed": 105,
+    "n": 140
+   },
+   "STANDARD": {
+    "passed": 121,
+    "n": 140
+   }
+  }
+ },
+ "conclusion": {
+  "directed": {
+   "FLASH": {
+    "passed": 40,
+    "n": 40
+   },
+   "STANDARD": {
+    "passed": 40,
+    "n": 40
+   }
+  },
+  "open": {
+   "FLASH": {
+    "passed": 30,
+    "n": 40
+   },
+   "STANDARD": {
+    "passed": 37,
+    "n": 40
+   }
+  }
+ },
+ "by_question": {
+  "delivery-reversal-lookup": {
+   "FLASH": 5,
+   "STANDARD": 4,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     4
+    ]
+   }
+  },
+  "delivery-reversal-directed": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "delivery-reversal-open": {
+   "FLASH": 0,
+   "STANDARD": 4,
+   "criteria": {
+    "FLASH": [
+     5,
+     0,
+     0,
+     0
+    ],
+    "STANDARD": [
+     5,
+     4,
+     4,
+     4
+    ]
+   }
+  },
+  "delivery-control-lookup": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "delivery-control-directed": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "delivery-control-open": {
+   "FLASH": 1,
+   "STANDARD": 4,
+   "criteria": {
+    "FLASH": [
+     5,
+     2,
+     1,
+     1
+    ],
+    "STANDARD": [
+     5,
+     4,
+     4,
+     4
+    ]
+   }
+  },
+  "complaints-reversal-lookup": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "complaints-reversal-directed": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "complaints-reversal-open": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "complaints-control-lookup": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "complaints-control-directed": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "complaints-control-open": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "contribution-reversal-lookup": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "contribution-reversal-directed": {
+   "FLASH": 4,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     4,
+     4,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "contribution-reversal-open": {
+   "FLASH": 0,
+   "STANDARD": 4,
+   "criteria": {
+    "FLASH": [
+     0,
+     1,
+     4,
+     4
+    ],
+    "STANDARD": [
+     4,
+     5,
+     4,
+     4
+    ]
+   }
+  },
+  "contribution-control-lookup": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "contribution-control-directed": {
+   "FLASH": 2,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     2,
+     2,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "contribution-control-open": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "refunds-reversal-lookup": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "refunds-reversal-directed": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "refunds-reversal-open": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "refunds-control-lookup": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "refunds-control-directed": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "refunds-control-open": {
+   "FLASH": 5,
+   "STANDARD": 5,
+   "criteria": {
+    "FLASH": [
+     5,
+     5,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     5,
+     5,
+     5
+    ]
+   }
+  },
+  "missing-routing": {
+   "FLASH": 0,
+   "STANDARD": 0,
+   "criteria": {
+    "FLASH": [
+     5,
+     2,
+     1,
+     0
+    ],
+    "STANDARD": [
+     5,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "missing-unreported": {
+   "FLASH": 0,
+   "STANDARD": 0,
+   "criteria": {
+    "FLASH": [
+     0,
+     0,
+     0,
+     1
+    ],
+    "STANDARD": [
+     2,
+     0,
+     2,
+     5
+    ]
+   }
+  },
+  "missing-november": {
+   "FLASH": 1,
+   "STANDARD": 4,
+   "criteria": {
+    "FLASH": [
+     5,
+     1,
+     5,
+     5
+    ],
+    "STANDARD": [
+     5,
+     4,
+     5,
+     5
+    ]
+   }
+  },
+  "missing-paid": {
+   "FLASH": 2,
+   "STANDARD": 1,
+   "criteria": {
+    "FLASH": [
+     2,
+     3,
+     3,
+     2
+    ],
+    "STANDARD": [
+     2,
+     1,
+     2,
+     2
+    ]
+   }
+  }
+ },
+ "pairs": {
+  "lookup": {
+   "Flash only": 1,
+   "both pass": 39
+  },
+  "directed": {
+   "both pass": 36,
+   "Standard only": 4
+  },
+  "open": {
+   "Standard only": 11,
+   "both fail": 3,
+   "both pass": 26
+  },
+  "missing": {
+   "both fail": 13,
+   "both pass": 1,
+   "Standard only": 4,
+   "Flash only": 2
+  },
+  "all": {
+   "Flash only": 3,
+   "both pass": 102,
+   "Standard only": 19,
+   "both fail": 16
+  }
+ },
+ "time": {
+  "lookup": {
+   "FLASH": {
+    "median": 8.6,
+    "p90": 9.5,
+    "n": 40
+   },
+   "STANDARD": {
+    "median": 9.1,
+    "p90": 12.0,
+    "n": 40
+   }
+  },
+  "directed": {
+   "FLASH": {
+    "median": 12.0,
+    "p90": 17.5,
+    "n": 40
+   },
+   "STANDARD": {
+    "median": 13.1,
+    "p90": 18.4,
+    "n": 40
+   }
+  },
+  "open": {
+   "FLASH": {
+    "median": 12.4,
+    "p90": 16.8,
+    "n": 40
+   },
+   "STANDARD": {
+    "median": 16.5,
+    "p90": 31.7,
+    "n": 40
+   }
+  },
+  "missing": {
+   "FLASH": {
+    "median": 11.9,
+    "p90": 16.3,
+    "n": 20
+   },
+   "STANDARD": {
+    "median": 14.4,
+    "p90": 40.4,
+    "n": 20
+   }
+  },
+  "all": {
+   "FLASH": {
+    "median": 11.3,
+    "p90": 15.3,
+    "n": 140
+   },
+   "STANDARD": {
+    "median": 12.3,
+    "p90": 25.7,
+    "n": 140
+   }
+  }
+ },
+ "paired_ratio_standard_over_flash": {
+  "median": 1.09,
+  "p10": 0.86,
+  "p90": 2.04,
+  "share_standard_slower": 0.65,
+  "n": 140
+ },
+ "diagnostics": {
+  "lookup": {
+   "FLASH": {
+    "sql_mean": 1,
+    "words_median": 29.5,
+    "unsupported_total": 0,
+    "responses_with_unsupported": 0
+   },
+   "STANDARD": {
+    "sql_mean": 1,
+    "words_median": 52.0,
+    "unsupported_total": 1,
+    "responses_with_unsupported": 1
+   }
+  },
+  "directed": {
+   "FLASH": {
+    "sql_mean": 1.02,
+    "words_median": 62.5,
+    "unsupported_total": 2,
+    "responses_with_unsupported": 2
+   },
+   "STANDARD": {
+    "sql_mean": 1.27,
+    "words_median": 157.0,
+    "unsupported_total": 9,
+    "responses_with_unsupported": 8
+   }
+  },
+  "open": {
+   "FLASH": {
+    "sql_mean": 1.23,
+    "words_median": 62.5,
+    "unsupported_total": 8,
+    "responses_with_unsupported": 6
+   },
+   "STANDARD": {
+    "sql_mean": 2.27,
+    "words_median": 232.5,
+    "unsupported_total": 25,
+    "responses_with_unsupported": 14
+   }
+  },
+  "missing": {
+   "FLASH": {
+    "sql_mean": 1.4,
+    "words_median": 85.5,
+    "unsupported_total": 20,
+    "responses_with_unsupported": 12
+   },
+   "STANDARD": {
+    "sql_mean": 2.3,
+    "words_median": 124.5,
+    "unsupported_total": 26,
+    "responses_with_unsupported": 15
+   }
+  },
+  "all": {
+   "FLASH": {
+    "sql_mean": 1.13,
+    "words_median": 44.0,
+    "unsupported_total": 30,
+    "responses_with_unsupported": 20
+   },
+   "STANDARD": {
+    "sql_mean": 1.63,
+    "words_median": 132.0,
+    "unsupported_total": 61,
+    "responses_with_unsupported": 38
+   }
+  }
+ },
+ "open_diff_ci95": [
+  0.075,
+  0.525
+ ]
+}

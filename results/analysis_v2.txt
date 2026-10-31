@@ -1,0 +1,67 @@
+requests 280 technical failures {'FLASH': 0, 'STANDARD': 0}
+
+PASS RATE (all four criteria)
+  lookup    FLASH 40/40 (100%) | STANDARD 38/40 (95%)
+  directed  FLASH 36/40 (90%) | STANDARD 40/40 (100%)
+  open      FLASH 26/40 (65%) | STANDARD 36/40 (90%)
+  missing   FLASH 3/20 (15%) | STANDARD 4/20 (20%)
+  all       FLASH 105/140 (75%) | STANDARD 118/140 (84%)
+
+CORRECT CONCLUSION (criterion 4, directed and open)
+  directed  FLASH 40/40 (100%) | STANDARD 40/40 (100%)
+  open      FLASH 30/40 (75%) | STANDARD 36/40 (90%)
+
+PASS BY QUESTION (of 5)
+  delivery-reversal-lookup       Flash 5  Standard 4   crit F[5, 5, 5, 5] S[5, 5, 5, 4]
+  delivery-reversal-directed     Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  delivery-reversal-open         Flash 0  Standard 4   crit F[5, 0, 0, 0] S[5, 4, 4, 4]
+  delivery-control-lookup        Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  delivery-control-directed      Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  delivery-control-open          Flash 1  Standard 4   crit F[5, 2, 1, 1] S[5, 4, 4, 4]
+  complaints-reversal-lookup     Flash 5  Standard 4   crit F[5, 5, 5, 5] S[5, 5, 5, 4]
+  complaints-reversal-directed   Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  complaints-reversal-open       Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  complaints-control-lookup      Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  complaints-control-directed    Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  complaints-control-open        Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  contribution-reversal-lookup   Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  contribution-reversal-directed Flash 4  Standard 5   crit F[4, 4, 5, 5] S[5, 5, 5, 5]
+  contribution-reversal-open     Flash 0  Standard 4   crit F[0, 1, 4, 4] S[4, 5, 4, 4]
+  contribution-control-lookup    Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  contribution-control-directed  Flash 2  Standard 5   crit F[2, 2, 5, 5] S[5, 5, 5, 5]
+  contribution-control-open      Flash 5  Standard 4   crit F[5, 5, 5, 5] S[5, 5, 5, 4]
+  refunds-reversal-lookup        Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  refunds-reversal-directed      Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  refunds-reversal-open          Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  refunds-control-lookup         Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  refunds-control-directed       Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  refunds-control-open           Flash 5  Standard 5   crit F[5, 5, 5, 5] S[5, 5, 5, 5]
+  missing-routing                Flash 0  Standard 0   crit F[5, 2, 1, 0] S[5, 0, 0, 0]
+  missing-unreported             Flash 0  Standard 0   crit F[0, 0, 0, 1] S[2, 0, 2, 5]
+  missing-november               Flash 1  Standard 4   crit F[5, 1, 5, 5] S[5, 4, 5, 5]
+  missing-paid                   Flash 2  Standard 0   crit F[2, 3, 3, 2] S[2, 0, 2, 2]
+
+PAIRED OUTCOMES (qid, repeat)
+  lookup    {'Flash only': 2, 'both pass': 38}
+  directed  {'both pass': 36, 'Standard only': 4}
+  open      {'Standard only': 11, 'both fail': 3, 'both pass': 25, 'Flash only': 1}
+  missing   {'both fail': 14, 'both pass': 1, 'Standard only': 3, 'Flash only': 2}
+  all       {'Flash only': 5, 'both pass': 100, 'Standard only': 18, 'both fail': 17}
+
+COMPLETION TIME, completed requests (seconds)
+  lookup    FLASH median 8.6 p90 9.5 | STANDARD median 9.1 p90 12.0
+  directed  FLASH median 12.0 p90 17.5 | STANDARD median 13.1 p90 18.4
+  open      FLASH median 12.4 p90 16.8 | STANDARD median 16.5 p90 31.7
+  missing   FLASH median 11.9 p90 16.3 | STANDARD median 14.4 p90 40.4
+  all       FLASH median 11.3 p90 15.3 | STANDARD median 12.3 p90 25.7
+
+paired time ratio Standard/Flash {'median': 1.09, 'p10': 0.86, 'p90': 2.04, 'share_standard_slower': 0.65, 'n': 140}
+
+SQL CALLS, WORDS, UNSUPPORTED CLAIMS
+  lookup    FLASH {'sql_mean': 1, 'words_median': 29.5, 'unsupported_total': 0, 'responses_with_unsupported': 0} | STANDARD {'sql_mean': 1, 'words_median': 52.0, 'unsupported_total': 2, 'responses_with_unsupported': 2}
+  directed  FLASH {'sql_mean': 1.02, 'words_median': 62.5, 'unsupported_total': 2, 'responses_with_unsupported': 2} | STANDARD {'sql_mean': 1.27, 'words_median': 157.0, 'unsupported_total': 9, 'responses_with_unsupported': 8}
+  open      FLASH {'sql_mean': 1.23, 'words_median': 62.5, 'unsupported_total': 8, 'responses_with_unsupported': 6} | STANDARD {'sql_mean': 2.27, 'words_median': 232.5, 'unsupported_total': 25, 'responses_with_unsupported': 14}
+  missing   FLASH {'sql_mean': 1.4, 'words_median': 85.5, 'unsupported_total': 20, 'responses_with_unsupported': 12} | STANDARD {'sql_mean': 2.3, 'words_median': 124.5, 'unsupported_total': 26, 'responses_with_unsupported': 15}
+  all       FLASH {'sql_mean': 1.13, 'words_median': 44.0, 'unsupported_total': 30, 'responses_with_unsupported': 20} | STANDARD {'sql_mean': 1.63, 'words_median': 132.0, 'unsupported_total': 62, 'responses_with_unsupported': 39}
+
+open pass-rate difference Standard - Flash, 95% question bootstrap [0.0, 0.525]

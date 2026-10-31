@@ -1,0 +1,8 @@
+[
+ {"qid": "contribution-control-open", "repeat": 2, "mode": "STANDARD", "criteria": [true, true, true, true],
+  "reason": "States net contribution rose from $30,000 to $35,000 and 'In dollars, October was better.' The extra per-dollar margin point is accurate and does not negate the required conclusion. Passed in grading pass 1."},
+ {"qid": "missing-paid", "repeat": 4, "mode": "STANDARD", "criteria": [true, true, true, true],
+  "reason": "Concludes the $60 is 'not a recorded payout' and names missing payment records. Flash responses with the same shape (opening total, closing disclaimer) passed. Passed in grading pass 1."},
+ {"qid": "complaints-reversal-lookup", "repeat": 4, "mode": "STANDARD", "criteria": [true, true, true, true], "unsupported_claims": 0,
+  "reason": "The 'figure covers the full month' remark is harmless and the same remark passed in repeat 1 of the final pass. Treated consistently as not unsupported."}
+]

@@ -1,0 +1,54 @@
+SUCCEEDED SELECT network_id, date_format(ship_date, 'yyyy-MM') AS month, service_zone,
+network_id | month | service_zone | shipments | avg_days | share
+NW-2863 | 2026-09 | local | 200 | 2.0 | 0.2
+NW-2863 | 2026-09 | remote | 800 | 8.0 | 0.8
+NW-2863 | 2026-10 | local | 200 | 1.0 | 0.2
+NW-2863 | 2026-10 | remote | 800 | 7.0 | 0.8
+NW-4127 | 2026-09 | local | 200 | 2.0 | 0.2
+NW-4127 | 2026-09 | remote | 800 | 8.0 | 0.8
+NW-4127 | 2026-10 | local | 800 | 3.0 | 0.8
+NW-4127 | 2026-10 | remote | 200 | 9.0 | 0.2
+SUCCEEDED SELECT network_id, date_format(ship_date, 'yyyy-MM') AS month, count(*) AS shipments, roun
+network_id | month | shipments | avg_days
+NW-2863 | 2026-09 | 1000 | 6.8
+NW-2863 | 2026-10 | 1000 | 5.8
+NW-4127 | 2026-09 | 1000 | 6.8
+NW-4127 | 2026-10 | 1000 | 4.2
+SUCCEEDED WITH s AS (SELECT network_id, trunc(ship_date, 'MM') AS m, count(*) AS shipments FROM ship
+network_id | m | shipments | complaints | rate
+NW-1594 | 2026-09-01 | 1000 | 40 | 0.04
+NW-1594 | 2026-10-01 | 1000 | 60 | 0.06
+NW-7351 | 2026-09-01 | 1000 | 40 | 0.04
+NW-7351 | 2026-10-01 | 2000 | 60 | 0.03
+SUCCEEDED WITH cr AS (SELECT invoice_id, sum(amount) AS credits FROM credits GROUP BY invoice_id)
+network_id | month | revenue | cost | credits | net_contribution
+NW-3916 | 2026-09 | 100000.00 | 70000.00 | 0.00 | 30000.00
+NW-3916 | 2026-10 | 120000.00 | 80000.00 | 5000.00 | 35000.00
+NW-6208 | 2026-09 | 100000.00 | 70000.00 | 0.00 | 30000.00
+NW-6208 | 2026-10 | 120000.00 | 80000.00 | 20000.00 | 20000.00
+SUCCEEDED SELECT network_id, date_format(invoice_date, 'yyyy-MM') AS month, sum(revenue) AS revenue_
+network_id | month | revenue_raw_join | net_raw_join
+NW-3916 | 2026-09 | 100000.00 | 30000.00
+NW-3916 | 2026-10 | 140000.00 | 41500.00
+NW-6208 | 2026-09 | 100000.00 | 30000.00
+NW-6208 | 2026-10 | 160000.00 | 33000.00
+SUCCEEDED SELECT s.network_id, count(*) AS eligible, sum(s.shipping_fee) AS refund_usd, collect_list
+network_id | eligible | refund_usd | ids
+NW-5472 | 3 | 60.00 | ["SH-NW-5472-L-R04","SH-NW-5472-L-R02","SH-NW-5472-L-R07"]
+NW-8045 | 6 | 120.00 | ["SH-NW-8045-L-C02","SH-NW-8045-L-C04","SH-NW-8045-L-C06","SH-NW-8045-L-C01","SH-NW-8045-L-C03","SH-NW-8045-L-C05"]
+SUCCEEDED SELECT network_id, count(*) AS late_shipments FROM shipments
+network_id | late_shipments
+NW-5472 | 8
+NW-8045 | 8
+SUCCEEDED SELECT min(ship_date), max(ship_date), max(delivered_date) FROM shipments
+min(ship_date) | max(ship_date) | max(delivered_date)
+2026-09-01 | 2026-10-28 | 2026-11-03
+SUCCEEDED SELECT 'networks' t, count(*) n FROM networks UNION ALL SELECT 'shipments', count(*) FROM 
+t | n
+networks | 8
+shipments | 9096
+complaints | 200
+invoices | 44
+credits | 12
+refund_policies | 2
+routing_changes | 1

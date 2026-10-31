@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.claude/
+results/_private/
+source/
+screenshots/*-raw*.png
+screenshots/03-standard-raw.png
+article/draft_v1_before_review.md
+article/methods_draft.md
+notes/codex_review_raw.txt
+article/draft_v2_before_codex.md

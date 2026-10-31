@@ -1,0 +1,197 @@
+# Thinking, Fast and Slow with Databricks Genie
+
+*I asked Genie Flash and standard Agent mode the same 28 questions, five times each. Flash reached the same conclusions as Standard when the question named the check. Flash skipped the check when the question did not name it.*
+
+Praneeth Paikray, 31 October 2026
+
+[IMAGE: figures/anim-mix-shift.gif]
+Alt text: Animation of 1,000 parcels. The local share grows from 20% to 80% while local and remote delivery times each rise by one day. The overall average moves from 6.8 days down to 4.2 days.
+
+## Meridian's average improves while both zones slow down
+
+Meridian Parcel reports faster deliveries in October. In one network, NW-4127, the average delivery time falls from 6.8 days to 4.2 days. A manager asks Genie whether delivery performance improved.
+
+The average supports a quick answer, which is yes. The zone data supports a different answer. Local deliveries take one day longer, and remote deliveries take one day longer. The October average is lower only because the network shipped far more local parcels, and local parcels arrive sooner.
+
+I wanted to know whether the mode you pick in Genie changes which of those two answers you get. So I built Meridian Parcel as a synthetic dataset on Databricks and ran 280 requests against it. Half the requests used Flash. The other half used standard Agent mode, which I call Standard.
+
+Here is what I found:
+
+- Flash and Standard reached the correct conclusion in all 40 of their directed responses, where the question named the check.
+- On the 8 open questions, where the question did not name the check, Standard passed 37 of 40 responses and Flash passed 26 of 40.
+- On NW-4127, Flash never reported that both zones got slower. Standard reported it in four of five runs.
+- Both modes failed most questions that asked for data the tables do not hold.
+- Standard took a median of 16.5 seconds on open questions and Flash took 12.4 seconds.
+
+## Flash spends less time reasoning
+
+Databricks released Flash in Beta on 15 October 2026. Flash is an option inside Genie Agent mode. The Genie documentation says Flash "spends less time reasoning", so its answers are shorter than reports from standard Agent mode. The documentation also says Flash keeps the same tools as standard Agent mode. Flash can run SQL, read files in Unity Catalog volumes, read uploaded files and call MCP connectors. [1] [2]
+
+In this article I call the two options Flash and Standard. You pick one when you start a conversation. In the Genie UI you press the lightning button next to the Agent button. In the API you set `execution_mode` to `FLASH` or `STANDARD` on the first request. The mode then applies to every turn in that conversation. To switch modes, you start a new conversation. [3]
+
+[IMAGE: screenshots/01-flash-toggle.png]
+Alt text: The Genie agent "Meridian Parcel Operations" with the open delivery question typed in. Agent is selected and the lightning button for Flash is switched on.
+
+The title borrows from Daniel Kahneman's book. I use it only as a label for fast and slow responses. It says nothing about how Genie works inside. I compare what I can observe, which is the checks each response makes, whether its conclusion is correct and how long the request takes.
+
+## Four cases test one extra check each
+
+Meridian Parcel lives in one Unity Catalog schema with seven tables. The tables hold shipments, complaints, invoices, credits, refund policies, routing changes and a list of networks. Each network has an ID such as NW-4127. The IDs do not say which case or answer they belong to.
+
+The data has four cases. Each case has two networks:
+
+- The reversal network has a headline number that points the wrong way. A correct response needs one extra check to find that.
+- The control network has the same headline, and the extra check agrees with it. A correct response must not invent a problem there.
+
+[IMAGE: figures/table-cases.png]
+Alt text: Table of the four cases. Delivery needs the average by zone and the zone mix. NW-4127's average falls while both zones get slower, and NW-2863's average falls while both zones get faster. Complaints needs the rate per shipment. NW-7351's count rises while its rate falls from 4% to 3%, and NW-1594's rate rises from 4% to 6%. Contribution needs credits and one row per invoice. NW-6208's net falls from $30K to $20K, and NW-3916's rises to $35K. Refunds needs the policy by promised date with weather excluded. NW-5472 has 3 qualifying shipments for $60, and NW-8045 has 6 for $120.
+
+The delivery case is the one from the opening. NW-4127 and NW-2863 both start at 6.8 days in September. In NW-4127, the local share of parcels rises from 20% to 80%, and both zones get one day slower. In NW-2863, the mix stays the same, and both zones get one day faster.
+
+[IMAGE: figures/fig1-delivery-reversal.png]
+Alt text: Two slope charts. NW-4127: local rises from 2 to 3 days, remote rises from 8 to 9 days, and the overall average falls from 6.8 to 4.2 days. NW-2863: local falls from 2 to 1 day, remote falls from 8 to 7 days, and the overall average falls from 6.8 to 5.8 days.
+
+The complaint case checks the denominator. Both networks go from 40 to 60 complaints. NW-7351 ships twice as many parcels in October, so its complaint rate falls from 4% to 3%. NW-1594 ships the same number, so its rate rises from 4% to 6%.
+
+The contribution case checks credits and row counts. Both networks grow revenue from $100,000 to $120,000. NW-6208 issues $20,000 of credits in October, so net contribution falls from $30,000 to $20,000. NW-3916 issues $5,000, so net contribution rises to $35,000. Each credited invoice has two credit rows. A plain join of invoices to credits counts those invoices twice. For NW-6208, that join shows October revenue of $160,000 and net contribution of $33,000, which turns a fall into a rise.
+
+The refund case checks policy dates. The old policy covers promised dates up to 14 October and refunds delays of more than five days. The new policy covers later promised dates and refunds delays of more than three days. Neither policy refunds weather delays. NW-5472 has eight late shipments across both policies, and three of them qualify for $60. NW-8045 has eight late shipments under the new policy only, and six of them qualify for $120.
+
+Four more questions ask for something the tables do not hold:
+
+- The routing question asks how many days a routing change saved. The data has no comparison group.
+- The unreported question asks how many customers had a problem but did not complain. The data records only filed complaints.
+- The November question asks for November delivery times. Shipment dates in the data end on 28 October.
+- The paid question asks how much the company paid in refunds. The data has no payment records.
+
+## Each question runs five times in each mode
+
+Each case has three levels of question:
+
+- A lookup question asks for one defined value, e.g., the average delivery time for NW-4127 in September and in October.
+- A directed question names the check, e.g., it asks for the average in each zone and each zone's share of shipments.
+- An open question states the business task and does not name the check, e.g., "Did delivery performance in network NW-4127 improve from September to October 2026? Support your conclusion."
+
+Four cases, two networks and three levels give 24 questions. The four missing-evidence questions bring the total to 28. Each mode answered each question five times. That is 280 requests in 140 pairs. The eight open questions are the main comparison.
+
+Both modes used the same Genie agent, tables, instructions, join definitions, permissions and SQL warehouse. The instructions define the business terms, e.g., complaint rate is complaints divided by shipments in the same month. The instructions do not say which check a question needs.
+
+I ran the requests through the Agent mode API. Every request started a new conversation with visualizations turned off. A fixed random seed set the order of the pairs and the order of the two modes inside each pair. Three pairs ran at the same time on a dedicated serverless SQL warehouse, which I started with one query before the run. The runner did not retry anything.
+
+During the run, three requests stopped receiving stream events within the same five seconds. Two of them had created conversations, and Genie had finished both on the server in 7 to 9 seconds. The third never reached Genie. So the connection dropped on my side, and I reran those three requests. That made 283 attempts from my client. All 280 benchmark requests then completed, and none failed on the Genie side.
+
+## A blind judge scores four criteria per response
+
+Each question has four criteria, written before the run. A response passes only when it meets all four. For the open delivery question on NW-4127, the criteria are:
+
+1. The response reports the overall average for both months, 6.8 and 4.2 days.
+2. The response reports each zone's average for both months, local 2 to 3 days and remote 8 to 9 days.
+3. The response reports each zone's share and explains how the mix moves the overall average.
+4. The response concludes that delivery did not improve, because both zones got slower.
+
+The fourth criterion is the conclusion. I also report it on its own, as the correct conclusion rate. A response can reach the right conclusion and still leave out one supporting number, and the two rates show that difference.
+
+I checked every expected value with reference SQL against the tables. An LLM judge, Claude Opus 5.5 on Databricks Model Serving, graded each response. The judge saw the question, the full list of tables with their column comments, the response, the SQL the response ran, the answer key and the criteria. It did not see the mode, the completion time or the repeat number. Response style can still give away the mode, e.g., Standard usually writes a longer report. So the grading is blind to the mode label but not to the writing style.
+
+I changed the answer key twice, and I graded all 280 responses again each time:
+
+- After the judge graded the first eight responses, I removed a gross margin requirement from the NW-6208 conclusion criterion. The question did not ask for gross margin.
+- After an independent review of the repo by Codex, I fixed an error in the NW-8045 refund criterion. It said the new policy covered every shipment, but it covers every late shipment. I also clarified one missing-evidence criterion and gave the judge the table list.
+
+The last two full grading passes agreed on 276 of 280 pass or fail verdicts. A second Codex check then found three Standard verdicts that applied the criteria unevenly. I settled those three by hand with one rule. The final conclusion counts, and a true remark is not an unsupported claim. All three became passes, and the repo lists each decision with its reason. I also read 55 graded responses in full, including every response to the open delivery questions.
+
+## Flash and Standard reach the same conclusions when the question names the check
+
+Each mode gave 40 directed responses, five runs of eight questions. Flash and Standard both reached the correct conclusion in all 40. Standard passed all four criteria in 40 responses and Flash in 36. All four of Flash's misses were on contribution questions. Each one was a short response that stated the right net contribution without the revenue, cost and credit figures behind it.
+
+On the 40 lookup responses, Flash passed all 40 and Standard passed 39. Standard's one miss added a claim to a correct number. On the NW-4127 lookup, that Standard response ended with "Delivery time improved by 2.6 days month-over-month", which is the misleading reading of that average.
+
+[IMAGE: figures/fig2-pass-by-level.png]
+Alt text: Dot chart of pass rates by question level. Lookup: Flash 40/40, Standard 39/40. Directed: Flash 36/40, Standard 40/40. Open: Flash 26/40, Standard 37/40. Missing evidence: Flash 3/20, Standard 5/20.
+
+## Standard catches the mix shift that Flash misses
+
+On the 40 open responses, Standard passed 37 and Flash passed 26. In the 40 pairs, Standard passed and Flash failed 11 times. Flash passed and Standard failed 0 times. Both passed 26 times, and both failed 3 times. With only eight open questions, the uncertainty is wide. A bootstrap over questions puts the difference between 7.5 and 52.5 percentage points, so the size of the gap is uncertain.
+
+The whole gap comes from two cases:
+
+- In the delivery case, Flash reached a correct, supported conclusion on NW-4127 in 0 of 5 runs and on NW-2863 in 1 of 5. Standard did so in 4 of 5 on each network. In one NW-4127 run, Flash split the on-time rate by zone and mentioned the mix, but it still said delivery got faster.
+- In the contribution case on NW-6208, both modes reached the right conclusion in 4 of 5 runs. Flash left out at least one of the revenue, cost or credit figures in all five, so it passed 0 of 5. Standard passed 4 of 5.
+
+On complaints and refunds, each mode passed all 20 of its open responses. Both modes divided complaints by shipments, and both modes applied the refund policy by promised date with weather excluded. The agent's instructions define complaint rate and refund eligibility. The instructions do not mention zones or zone mix.
+
+The NW-4127 responses show the difference. I took the first repeat of each mode, as I had decided before the run. Flash answered "No" for a different reason. It reported that the on-time rate fell from 100% to 50%, and it never looked at the zones.
+
+[IMAGE: screenshots/02-flash-nw4127-open.png]
+Alt text: Flash response to the open NW-4127 question. It says delivery did not improve overall because the on-time rate fell from 100% to 50%, and it shows a table of delivery days by month. It does not break the results down by zone.
+
+Standard ran four queries in the same request. It reported the headline average, then explained that September was 80% remote and October was 80% local. It then showed that each zone got one day slower.
+
+[IMAGE: screenshots/03-standard-nw4127-open.png]
+Alt text: Standard response to the open NW-4127 question. Under "Why the headline is misleading" it says September was 80% remote and October was 80% local, and that local went from 2.0 to 3.0 days and remote from 8.0 to 9.0 days.
+
+On the control network NW-2863, Flash said "improved" in all five runs, which is the right direction. In three of those runs it gave only the overall average, so it never showed that the improvement held in each zone. In a fourth run it gave the zone averages but not the zone shares. Standard checked the zones and the mix in four of five runs.
+
+Standard also made mistakes on open questions. One Standard response on NW-6208 joined invoices to credit rows and reported October revenue of $160,000 and net contribution of $33,000. Flash made a different SQL error in one run on the same question.
+
+[IMAGE: figures/fig3-open-conclusions.png]
+Alt text: Dot chart of correct, supported conclusions on the eight open questions. Delivery NW-4127: Flash 0/5, Standard 4/5. Delivery NW-2863: Flash 1/5, Standard 4/5. Contribution NW-6208: both 4/5. Every other network: both 5/5.
+
+## Both modes fail most missing-evidence questions
+
+On the four missing-evidence questions, Flash passed 3 of 20 responses and Standard passed 5 of 20. The two modes failed in different ways:
+
+- On the routing question, Standard opened with "Yes" and a one-day saving in all five runs. In three of five runs, Flash compared NW-2863 with the pooled other networks and reported a saving of about 0.16 days. That pool includes NW-4127, whose average fell only because of its mix.
+- On the unreported complaints question, Flash gave a number in all five runs, e.g., "263 customers had a problem with an October 2026 delivery in network NW-1594 but never filed a complaint." Standard declined in two runs, but it blamed the missing customer ID instead of the missing complaint data.
+- On the November question, both modes said there was no November data in all ten runs. Flash usually did not say where the data ended, which the criteria required.
+- On the refunds paid question, Standard said the network "paid out $60.00" in four of five runs, and Flash said it in two. The data shows that $60 is eligible. It holds no payment records.
+
+Neither mode is safe on questions like these. If a question asks for a fact the tables do not hold, read the response as an estimate until you check what the data contains.
+
+## Standard takes longer on open questions
+
+Every one of the 280 requests completed. Flash had a median completion time of 11.3 seconds and Standard had 12.3 seconds. Standard took longer than its Flash pair in 65% of the 140 pairs. The median Standard request took 1.09 times as long as its Flash pair.
+
+The difference grows with the question level. On lookups, Flash took a median of 8.6 seconds and Standard took 9.1. On open questions, Flash took 12.4 seconds and Standard took 16.5. The 90th percentile on open questions was 16.8 seconds for Flash and 31.7 seconds for Standard. On open questions, Standard ran 2.3 SQL queries per response on average and Flash ran 1.2.
+
+[IMAGE: figures/fig4-completion-time.png]
+Alt text: Strip chart of completion time per request by question level. Medians: lookup 9s for both modes, directed 12s Flash and 13s Standard, open 12s Flash and 16s Standard, missing evidence 12s Flash and 14s Standard. Standard has a long tail on open and missing-evidence questions up to about 58 seconds.
+
+Standard also wrote longer responses. On open questions, the median Standard response had 233 words and the median Flash response had 63. Across all 280 responses, the judge counted 61 unsupported claims in 38 Standard responses and 30 in 20 Flash responses. On open questions alone, the counts were 25 claims in 14 Standard responses and 8 in 6 Flash responses. More text gave Standard more room to add a claim the data did not support.
+
+## Flash fits questions that name the check
+
+In this benchmark, a slower response was not always a better response. Snell and colleagues found that the value of extra reasoning at answer time depends on how hard the problem is. [4] In this run, Standard's extra reasoning made the largest difference on the open questions.
+
+Here is how I would choose between the two modes:
+
+- Use Flash when you know the check you want and put it in the question. On directed questions, Flash reached every correct conclusion and was about one second faster. Ask for the supporting figures too, because Flash sometimes leaves them out.
+- Use Flash when the check lives in the agent's instructions. Flash handled the complaint rate and the refund policy dates as well as Standard did. Both rules were written in the instructions, and I did not test a run without them.
+- Use Standard when you ask an open question about why a number moved. Standard looked at the zones and found the mix shift that Flash skipped.
+- Use either mode with care when the question asks for data you have not confirmed exists. Both modes gave invented figures in response to those questions.
+
+For an agent author, the delivery result suggests a second option. If a common question needs a breakdown, e.g., by zone, you can write that check into the agent's instructions. Then Flash may find it too. I did not test that change here.
+
+## This benchmark has limits
+
+- The data is small and synthetic. Each case has one designed check. A real dataset has more columns and more ways to go wrong.
+- The benchmark has eight open questions. Five repeats measure how stable each mode is on those questions. They do not add new business problems, so the interval on the difference is wide.
+- One LLM judge graded every response. Two full grading passes agreed on 276 of 280 verdicts, and I settled three inconsistent verdicts by hand. I read 55 responses in full, but I did not grade all 280 myself.
+- I measured completion time on the client. I did not measure cost or token use. The word Flash does not say anything about price.
+- Flash is in Beta, and Databricks upgraded the Agent mode models on the same day. These results describe one run on 31 October 2026.
+
+The practical question stays the same as in the opening. Further investigation helps when it changes the conclusion. In this run it changed the conclusion on the open delivery questions. It did not change the conclusion on lookups, directed questions, complaint rates or refund policies.
+
+If you want to run the same test on your own Genie agent, I can share the data generator, questions, answer key, runner and judge prompt.
+
+## Sources
+
+Product sources checked on 31 October 2026.
+
+1. [Databricks. AI/BI and Genie release notes 2026 (15 October 2026: Flash Beta and the Agent mode model upgrade).](https://docs.databricks.com/aws/en/ai-bi/release-notes/2026)
+2. [Databricks. Genie Agents concepts (Flash, standard Agent mode and Chat mode).](https://docs.databricks.com/aws/en/genie-agents/concepts)
+3. [Databricks API reference. Agent mode: Create a response (`execution_mode`).](https://docs.databricks.com/api/genie/v1/agent-mode-create-response)
+4. [Snell et al. Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters. arXiv:2408.03314.](https://arxiv.org/abs/2408.03314)
+5. [Shreya Shankar. Five Principles for Generating Readable AI Text in Bulk. Full Stack Data Lab, 29 October 2026. I used these principles to edit this article.](https://fsdatalab.github.io/blog/agent-text-at-scale/)
+
+*Disclosure: I work at Databricks. Opinions here are my own. All data in this article is synthetic.*
