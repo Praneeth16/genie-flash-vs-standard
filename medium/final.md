@@ -53,7 +53,7 @@ When the question named the check, Flash did as well as Standard. Both reached t
 This fits Kahneman's picture. System 1 does fine when someone points it at the right thing. If I ask Genie for volume per day, Flash computes volume per day. It does not need to work out that it should.
 
 [IMAGE: figures/fig2-pass-by-level.png]
-Alt text: Dot chart of pass rates in the first round by question level. Lookup: Flash 40/40, Standard 39/40. Directed: Flash 36/40, Standard 40/40. Open: Flash 26/40, Standard 37/40. Missing evidence: Flash 3/20, Standard 5/20.
+Alt text: Dot chart of first round answers that met every check, by question type. Lookup: Flash 40/40, Standard 39/40. Directed: Flash 36/40, Standard 40/40. Open: Flash 26/40, Standard 37/40.
 
 The one gap on directed questions came from detail, not from the conclusion. Flash sometimes gave the right answer without the numbers behind it.
 
@@ -78,17 +78,12 @@ It also overthought. One lookup asked only for two averages, and Standard added 
 
 Standard also wrote more. Its median open answer in the first round had 233 words, against 63 for Flash, and the judge found 61 unsupported claims in Standard's answers against 30 in Flash's. More reasoning gave Standard more room to be useful and more room to be wrong.
 
-## When neither can know
-
-Some questions asked for things the data does not hold, e.g., how many customers had a problem and never complained. Both modes did badly. Flash passed 3 of 20 and Standard passed 5 of 20. Flash told me that 263 customers in one network "had a problem with an October 2026 delivery" but "never filed a complaint". The data cannot know that. Thinking longer did not help much here.
-
 ## So which one should you use?
 
 Here is how I plan to choose:
 
 - If I can name the check, I use Flash and put the check in the question. I also ask for the supporting numbers, because Flash tends to leave them out.
 - If the obvious number could be wrong for a reason I have not thought of, I use Standard. Partial months, duplicate rows and shifts in mix are the cases where Flash failed in every open run.
-- If the data might not hold the answer, I don't trust either mode until I check what the data contains.
 
 In Kahneman's terms, Flash works like System 1, and the person asking can do the System 2 part. When you know what could go wrong, you can write the check into the question and get the fast answer. When you don't know what could go wrong, wait for Standard to look.
 

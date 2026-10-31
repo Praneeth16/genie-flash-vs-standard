@@ -47,15 +47,15 @@ def legend(fig):
         fig.text(0.72 + i * 0.12, 0.93, NAME[m], color=INK, fontsize=12.5, va="center")
 
 # Figure 2: pass rate by question level
-levels = [("lookup", "Lookup questions"), ("directed", "Directed questions"), ("open", "Open questions"), ("missing", "Missing-evidence questions")]
-fig, ax = plt.subplots(figsize=(12, 4.8))
+levels = [("lookup", "Lookup questions"), ("directed", "Directed questions"), ("open", "Open questions")]
+fig, ax = plt.subplots(figsize=(12, 4.2))
 vals = {m: [S["pass"][l][m]["passed"] / S["pass"][l][m]["n"] * 100 for l, _ in levels] for m in COLOR}
 ns = [S["pass"][l]["FLASH"]["n"] for l, _ in levels]
 dots(ax, [lab for _, lab in levels], vals, ns, 100, lambda v, n: f"{round(v * n / 100)}/{n}")
 ax.set_xlim(-12, 118)
 ax.set_xticks([0, 25, 50, 75, 100], ["0%", "25%", "50%", "75%", "100%"])
-ax.set_xlabel("Responses that meet all four criteria")
-fig.suptitle("Pass rate by question level", x=0.02, ha="left", y=0.95, fontsize=15, weight="bold", color=INK)
+ax.set_xlabel("Answers that met every check")
+fig.suptitle("First round: answers that met every check", x=0.02, ha="left", y=0.95, fontsize=15, weight="bold", color=INK)
 legend(fig)
 fig.text(0.02, 0.02, FOOT, color=INK2, fontsize=10.5)
 fig.tight_layout(rect=(0, 0.05, 1, 0.9))
