@@ -12,13 +12,13 @@ Genie Agent mode can now answer a question in [two ways](https://docs.databricks
 
 Databricks [recommends Flash for simpler tasks](https://docs.databricks.com/aws/en/genie-agents/concepts). But my questions don't arrive labelled "simple" or "hard", so I kept wondering what I get when I wait for Standard. Is it a better answer, or only a longer one?
 
-This article is my attempt to find out. I built a small fake company with traps hidden in its data. Then I asked both modes the same questions five times each over two rounds, and compared what they checked, what they concluded and how long they took.
+This article is my attempt to find out. I made up a delivery company called Meridian Parcel and hid traps in its data. Then I asked both modes the same questions five times each over two rounds, and compared what they checked, what they concluded and how long they took.
 
 ![The Genie agent "Meridian Parcel Operations" with the open delivery question typed in. Agent is selected and the lightning button for Flash is switched on.](../screenshots/01-flash-toggle.png)
 
-## Where did the idea come from?
+## What does a trap look like?
 
-Meridian Parcel is a made-up delivery company. In October, its network NW-4127 reports that the average delivery time fell from 6.8 days to 4.2 days. A manager asks whether delivery performance improved.
+Here is the first trap. In October, Meridian's network NW-4127 reports that the average delivery time fell from 6.8 days to 4.2 days. A manager asks whether delivery performance improved.
 
 The quick answer is yes. But if you split the parcels into local and remote deliveries, both got slower. Local went from 2 days to 3, and remote from 8 days to 9. The average fell only because October shipped far more local parcels, which are quick to deliver. The local share went from 20% to 80%.
 
