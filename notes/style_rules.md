@@ -9,4 +9,4 @@ The article is written as a story for a general reader, in the plain-writing sty
    - Flash and Standard are the two mode names. "Standard" means standard Agent mode.
 3. Two scores, named where they are used. "Met every check" means all four criteria. "Reached the right conclusion" means the final claim was right.
 4. Say which round a number comes from at first use.
-5. Plain writing. No dashes, colons only before lists, no filler, no bold as decoration, sentence-case headings, straight quotes. Use "e.g." for a single example.
+5. Plain writing. No dashes, colons only before lists, no filler, bold only for a few key phrases and numbers (about five in the article), italics for terms and titles, one blockquote for the main takeaway, sentence-case headings, straight quotes. Use "e.g." for a single example.

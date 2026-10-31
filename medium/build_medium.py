@@ -37,6 +37,8 @@ for b in blocks:
         buf.append(f"<h3>{inline(b[3:])}</h3>")
     elif all(l.startswith("- ") for l in b.splitlines()):
         buf.append("<ul>" + "".join(f"<li>{inline(l[2:])}</li>" for l in b.splitlines()) + "</ul>")
+    elif b.startswith("> "):
+        buf.append(f"<blockquote>{inline(b[2:])}</blockquote>")
     elif all(re.match(r"\d+\. ", l) for l in b.splitlines()):
         buf.append("<ol>" + "".join(f"<li>{inline(re.sub(r'^\d+\. ', '', l))}</li>" for l in b.splitlines()) + "</ol>")
     else:

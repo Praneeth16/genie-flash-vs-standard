@@ -10,13 +10,13 @@ Databricks Genie answers questions about company data. You ask in plain English,
 
 With Flash switched on, Genie answered in about 10 seconds. It said volume "decreased by 300 shipments, from 900 in September 2026 to 600 in October 2026."
 
-With Flash switched off, Genie took 13 to 32 seconds and reached the opposite conclusion. The network's October data stops on 15 October, so the two months cover different numbers of days. Per day, volume went up, from 30 shipments in September to 40 in October.
+With Flash switched off, Genie took 13 to 32 seconds and **reached the opposite conclusion**. The network's October data stops on 15 October, so the two months cover different numbers of days. Per day, volume went up, from 30 shipments in September to 40 in October.
 
 Both answers came from the same agent reading the same data. The only difference was one button. I asked the question five times in each mode, and the answers split the same way every time. In one run, Flash even wrote that "October is essentially a complete month". It never checked.
 
 ## Fast and slow thinking
 
-In *Thinking, Fast and Slow*, Daniel Kahneman describes two ways people think. System 1 is fast and automatic, and it answers from whatever is in front of it. System 2 is slow and takes effort, and it can check whether the first answer holds up. Most of the time System 1 is good enough. The trouble is that it does not notice when it is wrong. Kahneman calls this habit "what you see is all there is". System 1 builds the best story it can from the information it has, and it does not ask what is missing.
+In *Thinking, Fast and Slow*, Daniel Kahneman describes two ways people think. System 1 is fast and automatic, and it answers from whatever is in front of it. System 2 is slow and takes effort, and it can check whether the first answer holds up. Most of the time System 1 is good enough. The trouble is that it does not notice when it is wrong. Kahneman calls this habit *what you see is all there is*. System 1 builds the best story it can from the information it has, and it does not ask what is missing.
 
 Genie Agent mode now offers a similar choice. If you switch on the lightning button next to Agent, you get [Flash](https://docs.databricks.com/aws/en/ai-bi/release-notes/2026), which spends less time reasoning and answers faster. If you leave it off, you get standard Agent mode, which takes longer and checks more. I will call them Flash and Standard.
 
@@ -46,7 +46,7 @@ Before each round, I wrote down what a correct answer had to contain. Another AI
 
 ## When fast is enough
 
-When the question named the check, Flash did almost as well as Standard. Both reached the right conclusion in all 40 directed responses in the first round. In the second round, Flash got 38 of 40 and Standard got 40. On first round lookups, Flash was perfect at 40 of 40.
+When the question named the check, **Flash did almost as well as Standard**. Both reached the right conclusion in all 40 directed responses in the first round. In the second round, Flash got 38 of 40 and Standard got 40. On first round lookups, Flash was perfect at 40 of 40.
 
 This fits Kahneman's picture. System 1 does fine when someone points it at the right thing. If I ask Genie for volume per day, Flash computes volume per day. It does not need to work out that it should.
 
@@ -56,9 +56,9 @@ In the first round, the gap on directed questions came from detail. Flash someti
 
 ## When the obvious number is wrong
 
-The open questions are where the two modes split. In the second round, Flash reached the right conclusion on the partial month, duplicate and mix traps in 0 of 15 runs. Standard reached it in 10.
+The open questions are where the two modes split. In the second round, Flash reached the right conclusion on the partial month, duplicate and mix traps in **0 of 15 runs**. Standard reached it in **10**.
 
-Flash usually ran one query and reported what it saw. When every October row had been loaded twice, Flash said volume "doubled" in all five runs. When a complaint rate rose overall but fell in both delivery zones, Flash said it got worse in all five runs. This is "what you see is all there is" in practice. The first query returns a plausible number, and nothing in the number says it is wrong.
+Flash usually ran one query and reported what it saw. When every October row had been loaded twice, Flash said volume "doubled" in all five runs. When a complaint rate rose overall but fell in both delivery zones, Flash said it got worse in all five runs. This is *what you see is all there is* in practice. The first query returns a plausible number, and nothing in the number says it is wrong.
 
 Standard ran more queries before it answered. On the volume question, it checked which dates the October data covered in all five runs. On a delivery question in the first round, it split parcels into local and remote and found that both got slower, in four of five runs. The overall average had fallen from 6.8 days to 4.2 only because October shipped far more local parcels, which are quick to deliver.
 
@@ -80,10 +80,12 @@ Standard also wrote more. Its median open answer in the first round had 233 word
 
 Here is how I plan to choose:
 
-- If I can name the check, I use Flash and put the check in the question. I also ask for the supporting numbers, because Flash tends to leave them out.
-- If the obvious number could be wrong for a reason I have not thought of, I use Standard. Partial months, duplicate rows and shifts in mix are the cases where Flash failed in every open run.
+- **I use Flash when I can name the check.** I put the check in the question, and I ask for the supporting numbers, because Flash tends to leave them out.
+- **I use Standard when the obvious number could be wrong** for a reason I have not thought of. Partial months, duplicate rows and shifts in mix are the cases where Flash failed in every open run.
 
-In Kahneman's terms, Flash behaves like System 1, and the person asking can do the System 2 part. When you know what could go wrong, you can write the check into the question and get the fast answer. When you don't know what could go wrong, wait for Standard to look.
+In Kahneman's terms, Flash behaves like System 1, and the person asking can do the System 2 part.
+
+> If you know what could go wrong, put the check in the question and use Flash. If you don't, wait for Standard.
 
 If you build Genie agents, you can also write the checks your users often need into the agent's instructions, e.g., checking that a month is complete. Flash might then make them too. I have not tested that yet.
 
