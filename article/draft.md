@@ -10,7 +10,7 @@ Praneeth Paikray, 31 October 2026
 
 I asked Genie how shipment volume in one delivery network changed from September to October.
 
-With Flash switched on, Genie answered in about 10 seconds. "Shipment volume in network NW-6731 decreased by 300 shipments, from 900 in September 2026 to 600 in October 2026."
+With Flash switched on, Genie answered in about 10 seconds. It said volume "decreased by 300 shipments, from 900 in September 2026 to 600 in October 2026."
 
 With Flash switched off, Genie took 13 to 32 seconds and reached the opposite conclusion. The network's October data stops on 15 October. September had 30 shipments a day and October had 40, so volume went up.
 
@@ -24,7 +24,7 @@ Genie Agent mode now has a version of both. If you switch on the lightning butto
 
 ![The Genie agent "Meridian Parcel Operations" with a question typed in. Agent is selected and the lightning button for Flash is switched on.](../screenshots/01-flash-toggle.png)
 
-Databricks [recommends Flash for simpler tasks](https://docs.databricks.com/aws/en/genie-agents/concepts). But the NW-6731 question looks simple, and nothing in it says that half of October is missing. So I wanted a practical answer. When is the fast answer enough, and when should I wait for the slow one?
+Databricks [recommends Flash for simpler tasks](https://docs.databricks.com/aws/en/genie-agents/concepts). But that volume question looks simple, and nothing in it says that half of October is missing. So I wanted a practical answer. When is the fast answer enough, and when should I wait for the slow one?
 
 ## How I tested it
 
@@ -40,7 +40,7 @@ I asked about each network in three ways:
 
 - A lookup asks for one number.
 - A directed question names the check, e.g., it asks for volume per day.
-- An open question asks what a manager would ask, like the NW-6731 question, and leaves the check to Genie.
+- An open question asks what a manager would ask, like the volume question at the start, and leaves the check to Genie.
 
 Over two rounds, I sent 480 requests, each in a fresh conversation. Before each round, I wrote down what a correct answer had to contain. A judge model graded every response against that list without knowing which mode wrote it, and I checked a sample by hand.
 
@@ -60,9 +60,9 @@ The open questions are where the two modes split. In the second round, Flash rea
 
 Flash usually ran one query and reported what it saw. When every October row had been loaded twice, Flash said volume "doubled" in all five runs. When a complaint rate rose overall but fell in both delivery zones, Flash said it got worse in all five runs. This is "what you see is all there is" in practice. The first query returns a plausible number, and nothing in the number says it is wrong.
 
-Standard ran more queries before it answered. It checked the date range on NW-6731 in all five runs. On a delivery question in the first round, it split parcels into local and remote and found that both got slower, in four of five runs. The overall average had fallen from 6.8 days to 4.2 only because October shipped far more local parcels, which are quick to deliver. That is the animation at the top of this article.
+Standard ran more queries before it answered. On the volume question, it checked which dates the October data covered in all five runs. On a delivery question in the first round, it split parcels into local and remote and found that both got slower, in four of five runs. The overall average had fallen from 6.8 days to 4.2 only because October shipped far more local parcels, which are quick to deliver. That is the animation at the top of this article.
 
-![Dot chart of correct conclusions on the second round open questions. Partial month NW-6731: Flash 0/5, Standard 5/5. Duplicate rows NW-9154: Flash 0/5, Standard 2/5. Zone mix NW-5809: Flash 0/5, Standard 3/5. Zone mix control NW-1263: both 0/5. The partial month, duplicate and test parcel controls and the test parcel trap: both 5/5.](../figures/fig5-round2-open.png)
+![Dot chart of correct conclusions on the second round open questions. Half of October missing: Flash 0/5, Standard 5/5. October rows loaded twice: Flash 0/5, Standard 2/5. Complaint rate with a change in zone mix: Flash 0/5, Standard 3/5. The control for the zone mix trap: both 0/5. The other controls and the internal test parcel trap: both 5/5.](../figures/fig5-round2-open.png)
 
 The checks cost time. On the open questions in the second round, Flash took a median of 11 seconds and Standard took 26.
 
@@ -76,7 +76,7 @@ Standard also wrote more. Its median open answer in the first round had 233 word
 
 ## When neither can know
 
-Some questions asked for things the data does not hold, e.g., how many customers had a problem and never complained. Both modes did badly. Flash passed 3 of 20 and Standard passed 5 of 20. Flash told me that "263 customers had a problem with an October 2026 delivery in network NW-1594 but never filed a complaint", which the data cannot know. Thinking longer did not help much here.
+Some questions asked for things the data does not hold, e.g., how many customers had a problem and never complained. Both modes did badly. Flash passed 3 of 20 and Standard passed 5 of 20. Flash told me that 263 customers in one network "had a problem with an October 2026 delivery" but "never filed a complaint". The data cannot know that. Thinking longer did not help much here.
 
 ## So which one should you use?
 
